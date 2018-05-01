@@ -1,0 +1,111 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "PDFRead";
+    Layout = "~/Views/Shared/_PDFLayout.cshtml";
+}
+
+<div class="navigation row">
+    <div class="col-3">
+        <button id="btn-prev" class="btn btn-success"><< PREV</button>
+    </div>
+    <div class="col-6 text-center">
+        <input type="number" class="form-control" value="1" id="tbxPage" min="1" max="99999" width="80"/>
+        / <span id="totalPage"></span>
+        <button class="btn btn-success" id="btnGO">GO</button>
+    </div>
+    <div class="col-3">
+        <button id="btn-next" class="btn btn-success float-right">NEXT >></button>
+    </div>
+</div>
+
+<canvas id="canvas" style="width: 100%;"></canvas>
+
+@section Scripts {
+    <script>
+        $(".navigation").hide();
+        $.LoadingOverlay("show");
+
+        var currentPage = @ViewBag.Page;
+        var mainPDF;
+
+        $(document).on("click", "#btnGO", function() {
+            currentPage = parseInt($("#tbxPage").val());
+            navigate(mainPDF, currentPage);
+        })
+
+        function navigate(pdf, pageNum) {
+            pdf.getPage(pageNum).then(function (page) {
+                console.log('Page loaded');
+                $("#tbxPage").val(pageNum);
+                var scale = 1;
+                var viewport = page.getViewport((window.screen.width / page.getViewport(1.0).width) + 0.2);
+
+                // Prepare canvas using PDF page dimensions
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+                renderTask.then(function () {
+                    console.log('Page rendered');
+                });
+            });
+        }
+
+        function callGetDocment(response) {
+            // body...
+
+            PDFJS.getDocument(response).then(function (pdf) {
+                console.log('PDF loaded');
+                mainPDF = pdf;
+                navigate(pdf, currentPage);
+                $("#totalPage").text(pdf.numPages);
+                $(".navigation").show();
+                $.LoadingOverlay("hide");
+            }, function (reason) {
+                // PDF loading error
+                console.error(reason);
+            });
+        }
+
+        function getBinaryData() {
+            // body...
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', "@Url.Action("GetPDFData", "Book")", true);
+            xhr.responseType = 'arraybuffer';
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onload = function (e) {
+                //binary form of ajax response,
+                callGetDocment(e.currentTarget.response);
+            };
+
+            xhr.onerror = function () {
+                // body...
+                alert("xhr error");
+            }
+
+            xhr.send("Id=@Model");
+        }
+
+        getBinaryData();
+
+        $(document).on("click", "#btn-prev", function() {
+            currentPage -= 1;
+            navigate(mainPDF, currentPage);
+        });
+
+        $(document).on("click", "#btn-next", function() {
+            currentPage += 1;
+            navigate(mainPDF, currentPage);
+        });
+    </script>    
+}
+

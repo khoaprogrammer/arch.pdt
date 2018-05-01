@@ -1,0 +1,76 @@
+﻿@model IEnumerable<CIF.Models.BlogEntryView>
+
+@{
+    ViewBag.Title = "Blog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Blog</h2>
+
+<p>
+    @Html.ActionLink("Create New", "AddBlogEntry")
+    @Html.ActionLink("Manage Categories", "BlogCategories")
+</p>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage.ToString()
+    </div>
+}
+@if (ViewBag.CompleteMessage != null)
+{
+    <div class="alert alert-success">
+        @Html.Raw(ViewBag.CompleteMessage.ToString())
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PreviewImageUrl)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @item.PostTime.ToString("dd/MM/yyyy HH:mm")
+        </td>
+        <td>
+            <img src="@item.PreviewImageUrl" height="80" />
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditBlogEntry", new { Id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @using (Html.BeginForm("DeleteBlogEntry", "Admin", FormMethod.Post, new { @class="form-inline" }))
+            {
+                @Html.Hidden("Id", item.Id)
+                <a href="#" class="btn-delete">Delete</a>
+            }
+        </td>
+    </tr>
+}
+
+</table>
+
+@section scripts {
+    <script>
+        $(document).on("click", ".btn-delete", function () {
+            var conf = confirm("Are you sure?");
+            if (conf) {
+                $(this).closest("form").submit();
+            }
+        });
+    </script>    
+}

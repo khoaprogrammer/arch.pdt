@@ -1,0 +1,49 @@
+﻿@model CIF.Models.CourseSessionView
+
+<div class="card__inner">
+    <div class="search-course-card--card--left-col--3kKip">
+        <a href="@Url.Action("Index", "Course", new { Id = Model.Id })">
+            <img src="@Url.Content(Path.Combine(CIF.Models.Globals.CourseImagePath, Model.Course.Id + ".png"))" alt="course image" width="304" height="171" class="card__image">
+        </a>
+    </div>
+    <div class="fx">
+        <div class="card__head">
+            <a href="@Url.Action("Index", "Course", new { Id = Model.Id })" class="card__title">@Model.Course.Name</a>
+            <div class="bestseller-info " data-purpose="bestseller-badge">
+                <span class="badge badge-accented yellow">@(Model.OpenDate.AddDays(CIF.Models.Globals.CourseDaysBeforeClose).ToString("dd/MM")) đóng đăng ký</span>
+            </div>
+        </div>
+        <div class="middle-col">
+            <a href="/the-web-developer-bootcamp/#instructor" class="card__instructor">
+                <span><strong>Đợt: </strong></span><spans style="color: red"><strong>#@Model.Number</strong></spans>
+            </a>
+            <p class="card__subtitle">
+                @Html.Raw(Model.Course.ShortDescription)
+            </p>
+            <div class="card__metadata">
+                <span class="card__meta-item">
+                    <span class="card__icon fa fa-play-circle"></span>@Model.LessonCount bài học
+                </span>
+                <span class="card__meta-item">
+                    <span class="card__icon far fa-clock"></span>@if (Model.LessonCount % 3 == 0)
+                    { <text>@(Model.LessonCount / 3)</text> }
+                    else
+                    { <text>@((Model.LessonCount / 3) + 1)</text> } ngày
+                </span>
+                <span class="card__meta-item">
+                    <span class="card__icon fas fa-sliders-h"></span>All levels
+                </span>
+            </div>
+        </div>
+        <div class="right-col">
+            <div>
+                <span class="card__price"><i class="fa fa-calendar"></i> @Model.OpenDate.ToString("dd/MM/yyyy")</span>
+            </div>
+            <div class="card__star">
+                <a href="/the-web-developer-bootcamp/#reviews" class="review-count">
+                    <div>(@Model.Users.Count học viên)</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

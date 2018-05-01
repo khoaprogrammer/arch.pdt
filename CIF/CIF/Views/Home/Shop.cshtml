@@ -1,0 +1,290 @@
+﻿
+@{
+    ViewBag.Title = "Shop";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .shop-item {
+            border: 1px solid rgba(0,0,0,.1);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .shop-item-img, .shop-item-desc {
+            text-align: center;
+        }
+
+        .shop-item-img {
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .shop-item-name {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .shop-item-action div {
+            padding: 0px;
+        }
+
+        .shop-item-action button {
+            width: 100%;
+        }
+
+        .item-group {
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            text-align: center;
+            color: rgba(0,0,0,.5);
+            font-size: 25px;
+        }
+
+        .item-gain {
+            font-size: 1rem;
+            line-height: 1.25;
+            padding: .5rem .75rem !important;
+            font-weight: bold;
+            color: red;
+        }
+    </style>    
+}
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+}
+<div class="row item-group">
+    <div class="col-md-12">
+        <h3>ĐẶC BIỆT</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="shop-item">
+                    <div class="shop-item-name">THỜI GIAN</div>
+                    <div class="shop-item-img">
+                        <img src="https://cdn2.iconfinder.com/data/icons/appicns/513/472801-appicns_Time-Machine.png" height="80" />
+                    </div>
+                    <div class="shop-item-desc">
+                        <p>Dùng để ẩn quảng cáo trên trang</p>
+                        <p>Tỉ lệ quy đổi: <strong>1 <i class="fab fa-bitcoin"></i> = @CIF.Models.Globals.TimeExchangeRate phút</strong></p>
+                    </div>
+                    <hr />
+
+                    @using (Html.BeginForm("TimeExchange", "Shop", FormMethod.Post))
+                    {
+                        <div class="shop-item-action container-fluid">
+                            <div class="row">
+                                <div class="cif-input col-md-5">
+                                    @Html.Hidden("timeExchangeRate", CIF.Models.Globals.TimeExchangeRate, new { Id = "time-exchange-rate" })
+                                    <input type="number" placeholder="CIF" class="form-control" name="cif" id="cif" min="0" />
+                                </div>
+                                <div class="item-gain minutes-gain col-md-5">
+
+                                </div>
+                                <div class="buy col-md-2">
+                                    <button class="btn btn-success btn-time-exchange" type="button"><i class="fas fa-shopping-cart"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row item-group">
+    <div class="col-md-12">
+        <h3>KHÓA HỌC</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="shop-item">
+                    <div class="shop-item-name">SẤM SÉT X2</div>
+                    <div class="shop-item-img">
+                        <img src="@Url.Content("~/Content/shop-items/bolt-yellow.png")" height="80" />
+                    </div>
+                    <div class="shop-item-desc">
+                        <p>Tăng tốc độ ra bài của khóa học gấp 2 lần</p>
+                        <p>Giá: <strong>200</strong></p>
+                    </div>
+                    <hr />
+                    <div class="shop-item-action container-fluid">
+                        <div class="row">
+                            <div class="cif-input col-md-5">
+                                <input type="number" placeholder="Số lượng" class="form-control" />
+                            </div>
+                            <div class="item-gain col-md-5">
+
+                            </div>
+                            <div class="buy col-md-2">
+                                <button class="btn btn-success"><i class="fas fa-shopping-cart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="shop-item">
+                    <div class="shop-item-name">SẤM SÉT X3</div>
+                    <div class="shop-item-img">
+                        <img src="@Url.Content("~/Content/shop-items/bolt-blue.png")" height="80" />
+                    </div>
+                    <div class="shop-item-desc">
+                        <p>Tăng tốc độ ra bài của khóa học gấp 3 lần</p>
+                        <p>Giá: <strong>800</strong></p>
+                    </div>
+                    <hr />
+                    <div class="shop-item-action container-fluid">
+                        <div class="row">
+                            <div class="cif-input col-md-5">
+                                <input type="number" placeholder="Số lượng" class="form-control" />
+                            </div>
+                            <div class="item-gain col-md-5">
+
+                            </div>
+                            <div class="buy col-md-2">
+                                <button class="btn btn-success"><i class="fas fa-shopping-cart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="shop-item">
+                    <div class="shop-item-name">TÀI NGUYÊN</div>
+                    <div class="shop-item-img">
+                        <img src="@Url.Content("~/Content/shop-items/layers.png")" height="80" />
+                    </div>
+                    <div class="shop-item-desc">
+                        <p>Tải tài nguyên của khóa học</p>
+                        <p>Giá: <strong>100</strong></p>
+                    </div>
+                    <hr />
+                    <div class="shop-item-action container-fluid">
+                        <div class="row">
+                            <div class="cif-input col-md-5">
+                                <input type="number" placeholder="Số lượng" class="form-control" />
+                            </div>
+                            <div class="item-gain col-md-5">
+
+                            </div>
+                            <div class="buy col-md-2">
+                                <button class="btn btn-success"><i class="fas fa-shopping-cart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row item-group">
+    <div class="col-md-12">
+        <h3>SÁCH</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="shop-item">
+                    <div class="shop-item-name">TẢI SÁCH</div>
+                    <div class="shop-item-img">
+                        <img src="@Url.Content("~/Content/shop-items/books.png")" height="80" />
+                    </div>
+                    <div class="shop-item-desc">
+                        <p>Dùng để tải 1 cuốn sách về đọc offline</p>
+                        <p>Giá: <strong>200</strong></p>
+                    </div>
+                    <hr />
+                    <div class="shop-item-action container-fluid">
+                        <div class="row">
+                            <div class="cif-input col-md-5">
+                                <input type="number" placeholder="Số lượng" class="form-control" />
+                            </div>
+                            <div class="item-gain col-md-5">
+
+                            </div>
+                            <div class="buy col-md-2">
+                                <button class="btn btn-success"><i class="fas fa-shopping-cart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row item-group">
+    <div class="col-md-12">
+        <h3>HỎI ĐÁP</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="shop-item">
+                    <div class="shop-item-name">GÓI CÂU HỎI X5</div>
+                    <div class="shop-item-img">
+                        <img src="@Url.Content("~/Content/shop-items/help.png")" height="80" />
+                    </div>
+                    <div class="shop-item-desc">
+                        <p>5 câu hỏi sử dụng không giới hạn thời gian</p>
+                        <p>Giá: <strong>250</strong></p>
+                    </div>
+                    <hr />
+                    <div class="shop-item-action container-fluid">
+                        <div class="row">
+                            <div class="cif-input col-md-5">
+                                <input type="number" placeholder="Số lượng" class="form-control" />
+                            </div>
+                            <div class="item-gain col-md-5">
+
+                            </div>
+                            <div class="buy col-md-2">
+                                <button class="btn btn-success"><i class="fas fa-shopping-cart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).on("change paste keyup", "#cif", function () {
+            if ($(this).val() != "") {
+                $(".minutes-gain").text("= " + (parseInt($(this).val()) * parseFloat($("#time-exchange-rate").val())) + " phút");
+            } else {
+                $(".minutes-gain").text("");
+            }
+            
+        });
+
+        $(document).on("click", ".btn-time-exchange", function () {
+            var item = $(this);
+            $.confirm({
+                title: 'Xác nhận giao dịch',
+                content: 'Bạn có đồng ý thực hiện giao dịch này?',
+                buttons: {
+                    confirm: {
+                        text: 'Đồng ý',
+                        btnClass: "btn-success",
+                        action: function () {
+                            item.closest("form").submit();
+                        }
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        btnClass: "btn-danger",
+                        action: function () { }
+                    }
+                }
+            });
+        })
+    </script>
+}

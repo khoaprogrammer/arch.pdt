@@ -1,0 +1,92 @@
+﻿@model CIF.Models.DocumentView
+
+@{
+    ViewBag.Title = Model.Name + " | Coding is FUN!";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/bookindex.less" />
+}
+
+@section HeadScripts {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12">
+                <center>
+                    <img src="@Url.Content(Path.Combine("~/Content/documentcovers", Model.Id + ".png"))" class="img-preview" />
+                </center>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 btn-wrapper">
+                <button class="btn btn-success" id="btn-read"><i class="fa fa-book" aria-hidden="true"></i> Read this book</button>
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-md-12 btn-wrapper">
+                    <button class="btn btn-danger"><i class="fa fa-heart" aria-hidden="true"></i> Bookmark</button>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <i class="fa fa-eye"></i><strong> Visit: </strong>@Model.ViewCount
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <i class="fa fa-book"></i><strong> Page: </strong>@Model.PageCount
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12 bool-title">
+                <h2>@Model.Name</h2>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="player">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var options = {
+            valueNames: ['title']
+        };
+
+        var userList = new List('book-toc', options);
+
+        $("#btn-read").click(function () {
+            $.ajax("@Url.Action("AddBookRead", "Book")", {
+                type: "POST",
+                data: {
+                    "id": "@Model.Id"
+                },
+                success: function (result) {
+                    if (result) {
+                        @if (Model.DriveCode == null)
+                        {
+                            <text>location.href = "@Url.Action("Read", "Book", new { id = Model.Id, code = ViewBag.FirstContent }, this.Request.Url.Scheme)"</text>
+                        }
+                        else
+                        {
+                            <text>location.href = "@Url.Action("PDFRead", "Book", new { Id = Model.Id }, this.Request.Url.Scheme)"</text>
+                        }
+                    }
+                }
+            })
+        });
+    </script>
+}
+
+
+
+

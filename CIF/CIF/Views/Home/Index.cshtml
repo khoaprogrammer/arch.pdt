@@ -1,0 +1,251 @@
+﻿@{
+    ViewBag.Title = "Coding is FUN - Learn coding with books";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var newBooks = (List<CIF.Models.BookViewModel>)ViewBag.LastestBooks;
+}
+
+
+@section Styles {
+    <link href="~/Content/Slick/slick.css" rel="stylesheet" />
+    <link href="~/Content/Slick/slick-theme.css" rel="stylesheet" />
+    <link href="~/Content/PageStyles/Home/Index.css" rel="stylesheet" />
+    <link href="~/Content/courses.less" rel="stylesheet" type="text/css" />
+    <link href="~/Content/vertical-tabs.css" rel="stylesheet" type="text/css" />
+    <style>
+        .qc-new-books-top iframe {
+            margin: 0 auto;
+        }
+
+        .content-box {
+            width: 100%;
+          margin-bottom: 0;
+          position: relative;
+          display: inline-block;
+        }
+        .box-data {
+          position: relative;
+          padding: 10px;
+          background: #444;
+          border-top: 5px solid darkorange;
+          border-bottom: 2px solid #ccc;
+          color: white;
+          font-size: 14px;
+          line-height: 1.5;
+          box-shadow: inset 0 0 5px #333;
+        }
+
+        .box-data a {
+            text-decoration: none;
+            color: darkorange;
+        }
+
+        h3 {
+            text-align: center;
+            font-size: 25px;
+            color: rgba(0,0,0,.5);
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+}
+
+@section HeadScripts {
+    <script src="~/Scripts/Slick/slick.min.js"></script>
+    <script>
+        String.prototype.trunc = function (n, useWordBoundary) {
+            if (this.length <= n) { return this; }
+            var subString = this.substr(0, n - 1);
+            return (useWordBoundary
+               ? subString.substr(0, subString.lastIndexOf(' '))
+               : subString) + "  ...";
+        };
+    </script>
+    <meta property="og:image" content="@(Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/Content/Imgs/logo.png"))" />
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>SÁCH MỚI</h3>
+                @if (ViewBag.IsMobile != null)
+                {
+                    <div class="new-books">
+                        @foreach (CIF.Models.BookViewModel book in newBooks)
+                        {
+                            <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
+                                <a href="@Url.Action("Index", "Book", new { id = book.Id })">
+                                    <img src="@Url.Content(Path.Combine(CIF.Models.Globals.BookCoverPath, book.Id + ".png"))" height="200" />
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="new-books">
+                        @foreach (CIF.Models.BookViewModel book in newBooks.Take(5))
+                        {
+                            <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
+                                <a href="@Url.Action("Index", "Book", new { id = book.Id })">
+                                    <img src="@Url.Content(Path.Combine(CIF.Models.Globals.BookCoverPath, book.Id + ".png"))" height="200" />
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <div class="new-books">
+                        @foreach (CIF.Models.BookViewModel book in newBooks.Skip(5).Take(5))
+                        {
+                            <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
+                                <a href="@Url.Action("Index", "Book", new { id = book.Id })">
+                                    <img src="@Url.Content(Path.Combine(CIF.Models.Globals.BookCoverPath, book.Id + ".png"))" height="200" />
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @*<div class="row qc-new-blog-top">
+            <div id="SC_TBlock_494922" class="SC_TBlock">loading...</div>
+        </div>*@
+                <hr />
+                <h3>BÀI VIẾT</h3>
+                <div class="new-posts container-fluid">
+                    <section class="grid-section">
+                        @foreach (CIF.Models.BlogEntryView entry in ViewBag.LastestBlogEntries)
+                        {
+                            <a href="@Url.Action("Entry", "Blog", new { Id = entry.Id })">
+                                <article class="blog-card">
+                                    <div class="blog-card__image">
+                                        <img src="@entry.PreviewImageUrl">
+                                    </div>
+                                    <div class="blog-card__title">
+                                        <p> @entry.Title </p>
+                                    </div>
+
+                                    <div class="blog-card__details">
+                                        <span class="blog-card__details--time"><i class="far fa-clock"></i> @entry.PostTime.ToString("MMM") </span>
+                                        <span class="blog-card__details--view"><i class="fa fa-eye"></i> @entry.ReadCount </span>
+                                    </div>
+                                </article>
+                            </a>
+                        }
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>HƯỚNG DẪN</h3>
+                <div class="content-box">
+                    <div class="box-data">
+                        <p>
+                            <a href="http://phongdaotao.com/Blog/Entry/5">Dịch sách</a><br />
+                            <a href="http://phongdaotao.com/Blog/Entry/15">Kinh nghiệm & tiền tệ</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="row qc-new-books-top">
+    <!-- Begin BidVertiser code -->
+    <SCRIPT data-cfasync="false" SRC="//bdv.bidvertiser.com/BidVertiser.dbm?pid=801669&bid=1931797" TYPE="text/javascript"></SCRIPT>
+    <!-- End BidVertiser code -->
+</div>*@
+
+
+
+@*<div class="row">
+    <div class="col-md-1">
+        <div class="ribbon ribbon-green">
+            <i><span><s></s>Đang mở<s></s></span></i>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <ul class="courses-list">
+            @foreach (var session in openingSessions)
+            {
+                <li><span class="badge badge-default">#@session.Number</span> <a href="@Url.Action("Index", "Course", new { Id = session.Id })">@session.Course.Name</a><span class="course-open-date badge badge-success">@session.OpenDate.ToString("dd/MM")</span></li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-1">
+        <div class="ribbon ribbon-red">
+            <i><span><s></s>Sắp mở<s></s></span></i>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <ul class="courses-list">
+            @foreach (var session in openSoons)
+            {
+                <li><span class="badge badge-default">#@session.Number</span> <a href="@Url.Action("Index", "Course", new { Id = session.Id })">@session.Course.Name</a><span class="course-open-date badge badge-success">@session.OpenDate.ToString("dd/MM")</span></li>
+            }
+        </ul>
+    </div>
+</div>*@
+
+
+
+
+@section Scripts {
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+
+  $('.new-books').slick({
+  dots: true,
+  infinite: true,
+  speed: 300,
+  slidesToShow: 5,
+  slidesToScroll: 5,
+  autoplay: true,
+  autoplaySpeed: 3000,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        infinite: true,
+        dots: true
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        dots: true
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots: true
+      }
+    }
+    // You can unslick at a given breakpoint now by adding:
+    // settings: "unslick"
+    // instead of a settings object
+  ]
+  });
+    
+  $('.card__subtitle').each(function () {
+      $(this).text($(this).text().trunc(100, true));
+  });
+</script>
+@*<script type="text/javascript">
+  (sc_adv_out = window.sc_adv_out || []).push({
+    id : "494922",
+    domain : "n.ads3-adnow.com"
+  });
+</script>*@
+@*<script type="text/javascript" src="//st-n.ads3-adnow.com/js/adv_out.js"></script>*@
+}
+

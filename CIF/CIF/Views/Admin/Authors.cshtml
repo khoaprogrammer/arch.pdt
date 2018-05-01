@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CIF.Models.AuthorViewModel>
+
+@{
+    ViewBag.Title = "Authors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Authors</h2>
+
+<p>
+    @Html.ActionLink("Create New", "AddAuthor")
+</p>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage.ToString()
+    </div>
+}
+@if (ViewBag.CompleteMessage != null)
+{
+    <div class="alert alert-success">
+        @Html.Raw(ViewBag.CompleteMessage.ToString())
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "DeleteAuthor", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

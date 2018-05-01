@@ -1,0 +1,98 @@
+﻿@model IList<CIF.Models.BookViewModel>
+
+@{
+    ViewBag.Title = "Books";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/book-admin.less" />
+}
+
+<div class="heading">
+    <div class="col-md-4">
+        <h2>Books</h2>
+    </div>
+    <div class="col-md-5">
+        <a href="@Url.Action("AddBook", "Admin")" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+        <a href="@Url.Action("AddPDFBook", "Admin")" class="btn btn-success"><i class="fa fa-plus"></i> Add PDF</a>
+    </div>
+    <div class="col-md-3">
+        @using (Html.BeginForm("Books", "Admin", FormMethod.Get))
+        {
+            <div class="input-group search-box">
+                <input class="form-control" type="text" name="search" placeholder="Search" required />
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"><span style="margin-left:10px;">Search</span></button>
+                </span>
+            </div>
+        }
+    </div>
+</div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage.ToString()
+    </div>
+}
+@if (ViewBag.CompleteMessage != null)
+{
+    <div class="alert alert-success">
+        @Html.Raw(ViewBag.CompleteMessage.ToString())
+    </div>
+}
+<a href="@Url.Action("Books", "Admin", new { cat = "nocat" })">Chưa phân loại</a>
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            Name
+        </th>
+        <th>
+            Publish date
+        </th>
+        <th>
+            ISBN
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td><img src="@Url.Content("~/Content/bookcovers/" + item.Id + ".png")" height="70" /></td>
+        <td>
+            @item.Name
+        </td>
+        <td>
+            @item.PublishDate.ToString("MMMM yyyy")
+        </td>
+        <td>
+            @item.ISBN
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditBook", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "DeleteBook", new { Id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
+
+<div class="row">
+    <nav aria-label="Page navigation example" id="pagination">
+        <ul class="pagination">
+            <li class="page-item @if ((int)ViewBag.Page == 1) { <text>disabled</text> } "><a class="page-link" href="@Url.Action("Books", "Admin", new { search = Request.Params["search"], page = ViewBag.Page - 1 })">Previous</a></li>
+            @if (ViewBag.Page > 1)
+            {
+                <li class="page-item"><a class="page-link" href="@Url.Action("Books", "Admin", new { search = Request.Params["search"], page = ViewBag.Page - 1 })">@(ViewBag.Page - 1)</a></li>
+            }
+            <li class="page-item active"><a class="page-link" href="#">@ViewBag.Page</a></li>
+            @if (Model.Count == 20)
+            {
+                <li class="page-item"><a class="page-link" href="@Url.Action("Books", "Admin", new { search = Request.Params["search"], page = ViewBag.Page + 1 })">@(ViewBag.Page + 1)</a></li>
+            }
+            <li class="page-item @if (Model.Count != 20) { <text>disabled</text> }"><a class="page-link" href="@Url.Action("Books", "Admin", new { search = Request.Params["search"], page = ViewBag.Page + 1 })">Next</a></li>
+            <li class="page-item disabled"><a class="page-link" href="#">@((20 * ((int)ViewBag.Page - 1)) + Model.Count)/@ViewBag.TotalCount</a></li>
+        </ul>
+    </nav>
+</div>

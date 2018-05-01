@@ -1,0 +1,97 @@
+﻿@model List<CIF.Models.DocumentView>
+
+@{
+    ViewBag.Title = "Documents";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var categoryList = ViewBag.Categories;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/books.less" />    
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="list">
+            @foreach (var doc in Model)
+            {
+                <article class="list--item">
+                    <a href="@Url.Action("Index", "Document", new { Id = doc.Id })">
+                        <figure>
+                            <center><img src="@Url.Content(Path.Combine("~/Content/documentcovers", doc.Id + ".png"))" alt="" height="250"></center>
+                            <header>
+                                <h2>@doc.Name</h2>
+                            </header>
+                            <figcaption>
+                                @doc.PageCount trang
+                            </figcaption>
+                        </figure>
+                    </a>
+                </article>
+            }
+        </div>
+        <div class="row">
+            <nav aria-label="Page navigation example" id="pagination">
+                <ul class="pagination">
+                    <li class="page-item @if ((int)ViewBag.Page == 1) { <text>disabled</text> } "><a class="page-link" href="@Url.Action("Books", "Home", new { topicIds = Request.Params["topicIds"], authorId = Request.Params["authorId"], publisherId = Request.Params["publisherId"], page = ViewBag.Page - 1, search = Request.Params["search"] })">Previous</a></li>
+                    @if (ViewBag.Page > 1)
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Books", "Home", new { topicIds = Request.Params["topicIds"], authorId = Request.Params["authorId"], publisherId = Request.Params["publisherId"], page = ViewBag.Page - 1, search = Request.Params["search"]})">@(ViewBag.Page - 1)</a></li>
+                    }
+                    <li class="page-item active"><a class="page-link" href="#">@ViewBag.Page</a></li>
+                    @if (Model.Count == 20)
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Books", "Home", new { topicIds = Request.Params["topicIds"], authorId = Request.Params["authorId"], publisherId = Request.Params["publisherId"], page = ViewBag.Page + 1 , search = Request.Params["search"]})">@(ViewBag.Page + 1)</a></li>
+                    }
+                    <li class="page-item @if (Model.Count != 20) { <text>disabled</text> }"><a class="page-link" href="@Url.Action("Books", "Home", new { topicIds = Request.Params["topicIds"], authorId = Request.Params["authorId"], publisherId = Request.Params["publisherId"], page = ViewBag.Page + 1 , search = Request.Params["search"]})">Next</a></li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">
+                            @if (Model.Count == 20)
+                            {
+                                @(20 * (int)ViewBag.Page)<text>/@ViewBag.TotalCount</text>
+                            }
+                            else
+                            {
+                                @(20 * ((int)ViewBag.Page - 1) + Model.Count)<text>/@ViewBag.TotalCount</text>
+                            }
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="filter-sidebar">
+            <div class="col-md-12">
+                <center>
+                    <h3>Advanced Search</h3>
+                </center>
+            </div>
+            @using (Html.BeginForm())
+            {
+                <div class="form-group">
+                    @Html.Label("Keyword", new { @class = "col-md-12" })
+                    <div class="col-md-12">
+                        @Html.TextBox("search", (string)ViewBag.Search, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Topics", new { @class = "col-md-12" })
+                    <div class="col-md-12">
+                        <select multiple name="topicIds" id="topicIds" class="form-control">
+                            @foreach (var item in categoryList)
+                            {
+                                <option value="@item.Id">@item.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <center>
+                        <button type="submit" class="btn btn-success">Search</button>
+                    </center>
+                </div>
+            }
+        </div>
+    </div>
+</div>

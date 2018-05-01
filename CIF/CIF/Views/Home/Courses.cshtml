@@ -1,0 +1,165 @@
+﻿@model List<CIF.Models.CourseSessionView>
+
+@{
+    ViewBag.Title = "Course";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    int[] tagIds = (int[])ViewBag.TagIds;
+    string search = (string)ViewBag.Search;
+    string status = (string)ViewBag.Status;
+    var tags = (List<CIF.Models.TagView>)ViewBag.Tags;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/courses.less" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <style>
+        h3 {
+            color: rgba(0,0,0,.5);
+            font-size: 23px;
+        }
+
+        .advanced-search a {
+            font-size: 14px;
+            text-decoration: none;
+            color: #55565b;
+            transition: all .2s ease-in;
+            position: relative;
+            display: block;
+            padding: 30px 15px;
+        }
+
+            .advanced-search a:hover {
+                text-decoration: none;
+            }
+
+        .select2 {
+            width: 100% !important;
+        }
+    </style>
+}
+
+@section HeadScripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+}
+<div class="row">
+    <div class="col-md-3">
+        <div class="filter-sidebar">
+            @using (Html.BeginForm("Courses", "Home"))
+            {
+                <div class="form-group">
+                    @Html.Label("Keyword", new { @class = "col-md-12 control-label" })
+                    <div class="col-md-12">
+                        @Html.TextBox("search", (string)ViewBag.Search, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Tags", new { @class = "col-md-12 control-label" })
+                    <div class="col-md-12">
+                        <select class="js-example-basic-single" name="tagIds" id="tagIds" multiple>
+                            @foreach (var tag in tags)
+                            {
+                                if (tagIds != null)
+                                {
+                                    bool found = false;
+                                    foreach (var t in tagIds)
+                                    {
+                                        if (t == tag.Id)
+                                        {
+                                            <option value="@tag.Id" selected>#@tag.Name</option>
+                                            { found = true; }
+                                        }
+                                    }
+                                    if (!found)
+                                    {
+                                        <option value="@tag.Id">#@tag.Name</option>
+                                    }
+                                }
+                                <option value="@tag.Id">#@tag.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Status", new { @class = "col-md-12 control-label" })
+                    <div class="col-md-12">
+                        <select class="form-control" id="status" name="status">
+                            <option value="soon" @if (status == "soon") { <text> selected</text> }>Sắp mở</option>
+                            <option value="opening" @if (status == "opening") { <text> selected</text> }>Đang mở</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <center>
+                        <button type="submit" class="btn btn-success">Search</button>
+                    </center>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-9">
+        @foreach (var item in Model)
+        {
+            <div class="card__inner">
+                <div class="search-course-card--card--left-col--3kKip">
+                    <a href="@Url.Action("Index", "Course", new { Id = item.Id })">
+                        <img src="@Url.Content(Path.Combine(CIF.Models.Globals.CourseImagePath, item.Course.Id + ".png"))" alt="course image" width="304" height="171" class="card__image">
+                    </a>
+                </div>
+                <div class="fx">
+                    <div class="card__head">
+                        <a href="@Url.Action("Index", "Course", new { Id = item.Id })" class="card__title">@item.Course.Name</a>
+                        <div class="bestseller-info " data-purpose="bestseller-badge">
+                            <span class="badge badge-accented yellow">Best Seller</span>
+                        </div>
+                    </div>
+                    <div class="middle-col">
+                        <p class="card__instructor">
+                            <a href="/the-web-developer-bootcamp/#instructor" class="card__instructor">
+                                <span><strong>Đợt: </strong></span><spans style="color: red"><strong>#@item.Number</strong></spans>
+                            </a>
+                        </p>
+                        <p class="card__subtitle">
+                            @item.Course.ShortDescription
+                        </p>
+                        <div class="card__metadata">
+                            <span class="card__meta-item">
+                                <span class="card__icon fa fa-play-circle"></span>346 lectures
+                            </span>
+                            <span class="card__meta-item">
+                                <span class="card__icon fa fa-clock-o"></span>43 hours
+                            </span>
+                            <span class="card__meta-item">
+                                <span class="card__icon fa fa-sliders"></span>All levels
+                            </span>
+                        </div>
+                    </div>
+                    <div class="right-col">
+                        <div>
+                            <span class="card__price"><i class="fa fa-calendar"></i> @item.OpenDate.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <a href="#" class="card__a">
+                            <div class="star-rating">
+                                <span style="width:50%;">
+                                </span>
+                            </div>
+                        </a>
+                        <div class="card__star">
+                            <a href="/the-web-developer-bootcamp/#reviews" class="review-count">
+                                <div>(43,273 ratings)</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.js-example-basic-single').select2();
+        });
+    </script>    
+}

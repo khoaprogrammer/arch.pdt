@@ -1,0 +1,185 @@
+﻿@model CIF.Models.CourseView
+
+@{
+    ViewBag.Title = "CourseDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/admincoursedetail.less" />    
+}
+
+@section upscripts {
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $(".toggle-accordion").on("click", function () {
+                var accordionId = $(this).attr("accordion-id"),
+                  numPanelOpen = $(accordionId + ' .collapse.in').length;
+
+                $(this).toggleClass("active");
+
+                if (numPanelOpen == 0) {
+                    openAllPanels(accordionId);
+                } else {
+                    closeAllPanels(accordionId);
+                }
+            })
+
+            openAllPanels = function (aId) {
+                console.log("setAllPanelOpen");
+                $(aId + ' .panel-collapse:not(".in")').collapse('show');
+            }
+            closeAllPanels = function (aId) {
+                console.log("setAllPanelclose");
+                $(aId + ' .panel-collapse.in').collapse('hide');
+            }
+
+        });
+    </script>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage.ToString()
+    </div>
+}
+@if (ViewBag.CompleteMessage != null)
+{
+    <div class="alert alert-success">
+        @Html.Raw(ViewBag.CompleteMessage.ToString())
+    </div>
+}
+
+<h3>@Model.Name</h3>
+<hr />
+@using (Html.BeginForm("AddCourseChapter", "Admin", FormMethod.Post))
+{
+    @Html.Hidden("courseId", Model.Id)
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label col-md-12">Tên chương:</label>
+                <div class="col-md-12">
+                    @Html.TextBox("chapterName", null, new { @class="form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label col-md-12">Vị trí:</label>
+                <div class="col-md-12">
+                    @Html.TextBox("chapterOrder", null, new { @class="form-control", type="number" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="col-md-12 control-label"></label>
+                <button type="submit" class="btn btn-success">Thêm chương</button>
+            </div>
+        </div>
+    </div>
+}
+<hr />
+@using (Html.BeginForm("AutoPrepareCourse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.Hidden("courseId", Model.Id)
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-12">File Dữ liệu:</label>
+                <div class="col-md-12">
+                    @Html.TextBox("file", null, new { @class = "form-control", type="file" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="col-md-12"></label>
+                <button type="submit" class="btn btn-success">OK</button>
+            </div>
+        </div>
+    </div>
+}
+<hr />
+@foreach (var chapter in Model.CourseChapters)
+{
+    <div class="accordion-option">
+        <h3 class="title">#@chapter.Order @chapter.Title <a href="@Url.Action("AddChapterLesson", "Admin", new { chapterId = chapter.Id })"><i class="far fa-plus-square"></i></a>&nbsp;<a href="#" class="btn-delete-chapter" id="@chapter.Id" courseId="@Model.Id"><i class="fas fa-times"></i></a></h3>
+        <a href="javascript:void(0)" class="toggle-accordion active" accordion-id="#accordion"></a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        @foreach (var lesson in chapter.CourseLessons)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne" @if (lesson.DriveCode != null) { <text>style="background-color: #5cb85c;"</text> }>
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#lesson-@lesson.Id" aria-expanded="true" aria-controls="collapseOne">
+                           #@lesson.Order @lesson.Title @if (File.Exists(Path.Combine(Server.MapPath(CIF.Models.Globals.CourseCaptionPath), lesson.Id + ".vtt"))) { <text><i class="far fa-closed-captioning"></i></text> }
+                        </a>
+                    </h4>
+                </div>
+                <div id="lesson-@lesson.Id" class="panel-collapse collapse" role="tabpanel" aria-labelledby="lesson-@lesson.Id">
+                    <div class="panel-body">
+                        @*<iframe src="https://drive.google.com/file/d/@lesson.DriveCode/preview" width="640" height="320"></iframe>*@
+                       <hr />
+                        @using(Html.BeginForm("UpdateLessonCaption", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            if (System.IO.File.Exists(Server.MapPath(Path.Combine(CIF.Models.Globals.CourseCaptionPath, lesson.Id + ".vtt"))))
+                            {
+                                <strong>Có phụ đề</strong>
+                            }
+                            <div class="form-group">
+                                @Html.Hidden("sessionId", Model.Id)
+                                @Html.Hidden("lessonId", lesson.Id)
+                                @Html.TextBox("captionFile", null, new { @class = "form-control", type="file" })
+                                <button class="btn btn-success" type="submit">Upload</button>
+                            </div>
+                        }
+                        <a href="@Url.Action("EditChapterLesson", new { Id = lesson.Id })" class="btn btn-info">Edit</a>
+                        <hr />
+                        @using(Html.BeginForm("DeleteChapterLesson", "Admin", FormMethod.Post, new { @class="form-inline" }))
+                        {
+                            @Html.Hidden("lessonId", lesson.Id)
+                            @Html.Hidden("courseId", Model.Id)
+                            <a href="#" class="btn btn-danger btn-delete-lesson">Delete</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+@section scripts {
+    <script>
+        $(".btn-delete-lesson").click(function () {
+            var conF = confirm("Are you sure?");
+            if (conF) {
+                $(this).closest("form").submit();
+            }
+        });
+
+        $(".btn-delete-chapter").click(function () {
+            var conf = confirm("Are you sure?");
+            if (conf) {
+                $.ajax("@Url.Action("DeleteCourseChapter")", {
+                    type: "post",
+                    data: {
+                        Id: $(this).attr("id"),
+                        courseId: $(this).attr("courseId")
+                    },
+                    success: function (a) {
+                        location.reload();
+                    }
+                });
+            }
+        });
+    </script>    
+}

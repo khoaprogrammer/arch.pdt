@@ -1,0 +1,20 @@
+CREATE TABLE [dbo].[BlogEntries] (
+    [Id] [int] NOT NULL IDENTITY,
+    [Title] [nvarchar](max),
+    [PostTime] [datetime] NOT NULL,
+    [Content] [nvarchar](max),
+    [ShortDescription] [nvarchar](max),
+    [PreviewImageUrl] [nvarchar](max),
+    [Category_Id] [int],
+    CONSTRAINT [PK_dbo.BlogEntries] PRIMARY KEY ([Id])
+)
+CREATE INDEX [IX_Category_Id] ON [dbo].[BlogEntries]([Category_Id])
+CREATE TABLE [dbo].[BlogCategories] (
+    [Id] [int] NOT NULL IDENTITY,
+    [Name] [nvarchar](max),
+    [Parent_Id] [int],
+    CONSTRAINT [PK_dbo.BlogCategories] PRIMARY KEY ([Id])
+)
+CREATE INDEX [IX_Parent_Id] ON [dbo].[BlogCategories]([Parent_Id])
+ALTER TABLE [dbo].[BlogEntries] ADD CONSTRAINT [FK_dbo.BlogEntries_dbo.BlogCategories_Category_Id] FOREIGN KEY ([Category_Id]) REFERENCES [dbo].[BlogCategories] ([Id])
+ALTER TABLE [dbo].[BlogCategories] ADD CONSTRAINT [FK_dbo.BlogCategories_dbo.BlogCategories_Parent_Id] FOREIGN KEY ([Parent_Id]) REFERENCES [dbo].[BlogCategories] ([Id])

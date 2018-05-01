@@ -1,0 +1,51 @@
+﻿@model CIF.Models.UserView
+
+@{
+    ViewBag.Title = "AccountDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var roles = (List<CIF.Models.RoleView>)ViewBag.Groups;
+    var functions = (List<CIF.DB.Function>)ViewBag.Functions;
+}
+
+
+
+@section styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+}
+
+@section upscripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+}
+
+<h2>@Model.Email</h2>
+<hr />
+
+@using (Html.BeginForm("UpdateUser", "Admin", FormMethod.Post)) {
+    @Html.Hidden("Id", Model.Id)
+    <div class="form-group">
+        <label class="col-md-3 control-label">Nhóm</label>
+        <div class="col-md-9">
+            <select class="selectpicker" id="groups" name="groups" multiple>
+                @foreach (var group in roles)
+                {
+                    <option value="@group.Name" title="@group.Name" @if (Model.InRole(group.Id)) { <text>selected</text> })>@group.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">Functions</label>
+        <div class="col-md-9">
+            <select class="selectpicker" id="functions" name="functions" multiple>
+                @foreach (var function in functions)
+                {
+                    <option value="@function.Id" title="@function.Id" @if (Model.HasFunction(function.Id)) { <text>selected</text> }>@function.Id</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-success" type="submit">Update</button>
+    </div>
+}
+

@@ -1,0 +1,24 @@
+﻿@model CIF.Models.SystemDataView
+
+@{
+    ViewBag.Title = "BankAccounts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>BankAccounts</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        @using(Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.Code)
+            <div class="form-group">
+                @Html.TextAreaFor(x => x.Data, new { @class = "ckeditor" })
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success" type="submit">Cập nhật</button>
+            </div>
+        }
+    </div>
+</div>

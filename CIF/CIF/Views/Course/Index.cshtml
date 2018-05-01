@@ -1,0 +1,161 @@
+﻿@model CIF.Models.CourseSessionView
+
+@using CIF.Models
+
+@{
+    ViewBag.Title = Model.Course.Name + " | Coding is FUN";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    UserView user = ViewBag.User != null ? (UserView)ViewBag.User : null;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/homecoursedetail.less" /> 
+    <link rel="stylesheet" type="text/css" href="~/Content/accordion/accordion.less" />   
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage.ToString()
+    </div>
+}
+@if (ViewBag.CompleteMessage != null)
+{
+    <div class="alert alert-success">
+        @Html.Raw(ViewBag.CompleteMessage.ToString())
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="course-meta">
+            <h1>@Model.Course.Name</h1>
+            <div class="course-shordes">
+                @Model.Course.ShortDescription
+            </div>
+            <div class="course-meta-detail">
+
+            </div>
+        </div>
+        <div class="course-description">
+            @Html.Raw(Model.Course.Description)
+        </div>
+        <div class="course-curriculum">
+            <h4>Nội dung khóa học</h4>
+            <div class="accordion-menu">
+                @foreach (var chapter in Model.Course.CourseChapters)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#chap-@chapter.Id" style="color: darkorange;">
+                                    <span class="glyphicon glyphicon-folder-close m5"></span> Chương @chapter.Order. @chapter.Title
+                                    <span class="accordion-menu-collapsible-icon glyphicon glyphicon-chevron-down"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="chap-@chapter.Id" class="panel-collapse collapse show">
+                            <div class="panel-body">
+                                <ul class="">
+                                    @foreach (var lesson in chapter.CourseLessons)
+                                    {
+                                        <li>Bài @lesson.Order. @lesson.Title <span class="badge badge-info"> @if (lesson.Duration >= 60)
+                                        { <text>@(lesson.Duration / 60)m@(lesson.Duration % 60)s</text> }
+                                        else { @lesson.Duration<text>s</text> }</span></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="course-panel-wrapper">
+            <div class="course-panel">
+                <img class="img-responsive" id="preview-img" src="@Url.Content(Path.Combine(CIF.Models.Globals.CourseImagePath, Model.Course.Id + ".png"))" />
+                <div class="text-center" style="padding: 10px;">
+                    <strong>Đợt: </strong><strong style="color: red">#@Model.Number</strong>
+                </div>
+                <div class="course-action">
+                    @if (Model.OpenDate > DateTime.Today)
+                    {
+                        <a class="btn-not-login btn btn-lg btn-primary" href="#"><i class="fa fa-calendar"></i> @Model.OpenDate.ToString("dd/MM/yyyy")</a>
+                    }
+                    else
+                    {
+                        if (user == null)
+                        {
+                            <a class="btn-not-login btn btn-lg btn-primary" href="@Url.Action("Register", "Account")">Đăng nhập để học</a>
+                        }
+                        else
+                        {
+                            if (user.SessionEnrolled(Model.Id))
+                            {
+                                <a class="btn-learn btn btn-lg btn-primary" href="@Url.Action("Learn", "Course", new { id = Model.Id })" target="_blank">Học ngay</a>
+                            }
+                            else
+                            {
+                                using (Html.BeginForm("Enroll", "User", FormMethod.Post, new { @class = "form-inline" }))
+                                {
+                                    @Html.Hidden("userId", user.Id)
+                                    @Html.Hidden("sessionId", Model.Id)
+                                    <button class="btn-enroll btn btn-lg btn-primary">Đăng ký học</button>
+                                }
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).on("click", ".btn-enroll", function () {
+            var conf = confirm("Xác nhận đăng ký?");
+            if (conf) {
+                $(this).closest("form").submit();
+            }
+        });
+
+        var fixmeTop = $('.course-panel').offset().top;
+        var right = $(window).width() - ($('.course-panel').offset().left + $('.course-panel').outerWidth())
+        var ewidth = $('.course-panel').width();
+        var meta = $('.course-meta').offset().top;
+        var metaLeft = $('.course-meta').offset().left;
+        var metaWidth = $('.course-meta').width();
+        var metaParentPadding = parseInt($('.course-meta').closest('div').css('padding'))
+        $(window).scroll(function () {
+            var currentScroll = $(window).scrollTop();
+            if (currentScroll >= meta) {
+                $('.course-meta').css({
+                    position: 'fixed',
+                    top: '0px',
+                    left: metaLeft.toString() + 'px',
+                    width: (metaWidth + (metaParentPadding * 2)).toString() + 'px'
+                });
+            } else {
+                $('.course-meta').css({
+                    position: 'static'
+                });
+            }
+            if (currentScroll >= fixmeTop) {
+                $('.course-panel').css({
+                    position: 'fixed',
+                    top: '10px',
+                    right: right.toString() + 'px',
+                    width: ewidth.toString() + 'px'
+                });
+            } else {
+                $('.course-panel').css({
+                    position: 'static'
+                });
+            }
+        });
+    </script>    
+}
+
+

@@ -1,0 +1,74 @@
+﻿@model CIF.Models.TopicViewModel
+
+@{
+    ViewBag.Title = "<Edit> " + Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var parentList = (List<CIF.Models.TopicViewModel>)ViewBag.ParentList;
+    var parentSelect = new SelectList(parentList, "Id", "DisplayName");
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/edittopic.less" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">    
+}
+
+@section upscripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+}
+
+<h2>EditTopic</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    <div class="form-horizontal">
+        <h4>Topic</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ParentId, "ParentId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(x => x.ParentId, parentSelect, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ParentId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Childs</label>
+                    <div class="col-md-10">
+                        <select class="selectpicker" id="ChildIds" name="ChildIds" multiple>
+                            @foreach (CIF.Models.TopicViewModel topic in parentList)
+                            {
+
+                                <option value="@topic.Id" title="@topic.Name" 
+                                    @if (Model.ChildIds.Contains(topic.Id)) {
+                                    <text>selected</text>
+                                }>@topic.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Topics")
+</div>

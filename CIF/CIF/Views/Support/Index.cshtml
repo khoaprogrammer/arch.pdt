@@ -1,0 +1,74 @@
+﻿@model CIF.Models.SupportTicketView
+
+@{
+    ViewBag.Title = "Hỗ trợ";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section HeadScripts {
+    <script src="//cdn.ckeditor.com/4.8.0/full/ckeditor.js"></script>    
+}
+
+@if (ViewBag.CompleteMessage != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.CompleteMessage
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <center><h3>Nội dung hỗ trợ</h3></center>
+        <p>
+            <strong>1. Yêu cầu sách</strong><br />
+            Các bạn vui lòng ghi rõ thông tin về sách như tên, tác giả, .... Trong trường hợp không tìm cụ thể sách nào thì nêu các danh mục quan tâm. Chúng tôi sẽ cố gắng tìm giúp bạn hoặc gợi ý những cuốn sách tương tự.
+        </p>
+        <p><strong>2. Báo lỗi web/sách</strong><br />
+            Các bạn vui lòng ghi rõ sách nào và mục nào của sách bị lỗi. Trong trường hợp lỗi web các bạn vui lòng ghi rõ lỗi cụ thể ở trang nào.
+        </p>
+        <p><strong>3. Liên hệ khác</strong><br />
+            Mục này dùng để liên lạc với quản trị trong trường hợp thắc mắc, đóng góp ý kiến, đóng góp sách, các vấn đề khác ...
+        </p>
+    </div>
+    <div class="col-md-8">
+        @using(Html.BeginForm("Index", "Support", FormMethod.Post))
+        {
+            <div class="form-group">
+                <label class="col-12 control-label"><strong>Loại hỗ trợ</strong></label>
+                <div class="col-12">
+                    @Html.EnumDropDownListFor(x => x.Type, new
+               {
+                   @class="form-control"
+               })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-12 control-label"><strong>Email</strong></label>
+                <div class="col-12">
+                    @Html.TextBoxFor(x => x.Email, new
+               {
+                   @class="form-control"
+               })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-12 control-label"><strong>Nội dung</strong></label>
+                <div class="col-12">
+                    @Html.TextAreaFor(x => x.Detail)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-12">
+                    <button class="btn btn-success" type="submit">Gửi yêu cầu</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        CKEDITOR.replace("Detail");
+    </script>    
+}

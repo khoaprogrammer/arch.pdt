@@ -1,0 +1,128 @@
+﻿@model IEnumerable<CIF.Models.CourseView>
+
+@{
+    ViewBag.Title = "Courses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Linq;
+
+@section styles {
+    <style>
+        td {
+            vertical-align:middle !important;
+        }
+
+        .no-border-top {
+            border-top: none !important;
+        }
+
+        .no-session {
+            color: red;
+        }
+    </style>    
+}
+
+<h2>Courses</h2>
+
+<p>
+    @Html.ActionLink("Create New", "AddCourse")
+</p>
+<p>
+    @Html.ActionLink("Prepare Sessions", "PrepareCourseSessions")
+</p>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage.ToString()
+    </div>
+}
+@if (ViewBag.CompleteMessage != null)
+{
+    <div class="alert alert-success">
+        @Html.Raw(ViewBag.CompleteMessage.ToString())
+    </div>
+}
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AddDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td rowspan="2"><img src="@Url.Content(Path.Combine(CIF.Models.Globals.CourseImagePath, item.Id + ".png"))" height="70" /></td>
+        <td>
+            <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditCourse", new { Id=item.Id }) |
+            @Html.ActionLink("Details", "CourseDetail", new { id=item.Id }) |
+            @using (Html.BeginForm("DeleteCourse", "Admin", FormMethod.Post, new { @class="form-inline" }))
+            {
+                @Html.Hidden("Id", item.Id)
+                <a href="#" class="btn-delete">Delete</a>
+            }
+        </td>
+    </tr>
+    <tr>
+        @if (item.CourseSessions.Count == 0)
+        {
+            <td class="no-border-top" colspan="2">
+                @using (Html.BeginForm("OpenCourseSession", "Admin", FormMethod.Post, new { @class="form-inline" }))
+                {
+                    <div class="col-md-8">
+                        @Html.Hidden("courseId", item.Id)
+                        @Html.TextBox("openDate", DateTime.Today.ToString("yyyy-MM-dd"), new { @class = "form-control", type = "date" })
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success">Mở đợt</button>
+                    </div>
+                }
+            </td>
+        } else
+        {
+            <td class="no-border-top" >
+                Đợt <strong>@item.LatestSession.Number</strong>
+            </td>
+            <td class="no-border-top">
+                Hết hạn <strong style="color: red">
+                @if (item.LessonCount % 3 == 0)
+                {
+                    @item.LatestSession.OpenDate.AddDays(item.LessonCount / 3).ToString("dd/MM/yyyy")
+                }
+                else
+                {
+                    @item.LatestSession.OpenDate.AddDays((item.LessonCount / 3) + 1).ToString("dd/MM/yyyy")
+                }
+                </strong>
+            </td>
+            <td class="no-border-top">
+
+            </td>
+        }
+        
+    </tr>
+}
+
+</table>
+
+@section scripts {
+    <script>
+        $(".btn-delete").click(function () {
+            var conF = confirm("Are you sure?");
+            if (conF) {
+                $(this).closest("form").submit();
+            }
+        });
+    </script>    
+}

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CIF.Models.SupportTicketView>
+
+@{
+    ViewBag.Title = "Requests";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Requests</h2>
+
+<table class="table table-responsive table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>
+                Title
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Time
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var ticket in Model)
+    {
+        <tbody>
+            <tr class="clickable" data-toggle="collapse" data-target="#group-of-rows-@ticket.Id" aria-expanded="false" aria-controls="group-of-rows-@ticket.Id">
+                <td>@ticket.Id</td>
+                <td>@ticket.title</td>
+                <td>@ticket.Email</td>
+                <td>@ticket.Time.ToString("hh:MM dd/MM/yyyy")</td>
+                <td><a href="#">Response</a></td>
+            </tr>
+        </tbody>
+        <tbody id="group-of-rows-@ticket.Id" class="collapse">
+            <tr>
+                <td colspan="5">@Html.Raw(ticket.Detail)</td>
+            </tr>
+            @foreach (var mess in ticket.Messages)
+            {
+                <tr>
+                    <td colspan="5">
+                        @mess.Sender <i>@mess.Date.ToString("HH:mm dd/MM/yyyy")</i><br />
+                        <iframe srcdoc="@Html.Raw(mess.Detail)" style="width: 100%; border: none"></iframe>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>

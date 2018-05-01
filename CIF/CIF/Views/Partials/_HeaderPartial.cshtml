@@ -1,0 +1,102 @@
+﻿<div class="container-fluid" id="main-logo">
+    <div class="row">
+        <div class="col-md-9 logo-wrapper">
+            <img src="~/Content/Imgs/logo.png" class="img-responsive logo" />
+            <nav class="navbar navbar-toggleable-md navbar-light">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Home")"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Max", "Home")"><i class="fa fa-book" aria-hidden="true"></i> 3DMax</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Sketchup", "Home")"><i class="fa fa-book" aria-hidden="true"></i> Sketchup</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Ebook", "Home")"><i class="fa fa-film" aria-hidden="true"></i> Ebook</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Shop", "Home")"><i class="fas fa-shopping-basket"></i> Store</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Blog")"><i class="fas fa-rss"></i> Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Support")"><i class="fa fa-life-ring"></i> Hỗ trợ</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Hướng dẫn
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Donate", "Home")"><i class="far fa-credit-card"></i> Donate</a>
+                        </li>
+                    </ul>
+                    @*@if (ViewBag.HideTopSearch == null)
+                {
+                    using (Html.BeginForm("Books", "Home", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0" }))
+                    {
+                        @Html.TextBox("search", "*", new { @class = "form-control mr-sm-2", type = "search", id = "tbx-search" })
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
+                    }
+                }*@
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-3">
+            @if (ViewBag.HideMiniLogin == null)
+            {
+                @Html.Partial("~/Views/Partials/_GuestLoginPartial.cshtml", new CIF.Models.LoginViewModel())
+            }
+        </div>
+    </div>
+</div>
+
+@*<nav class="navbar navbar-toggleable-md navbar-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Home")"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Books", "Home")"><i class="fa fa-book" aria-hidden="true"></i> Sách</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("CoursesLanding", "Home")"><i class="fa fa-film" aria-hidden="true"></i> Khóa học</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Blog")"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Support")"><i class="fa fa-life-ring"></i> Hỗ trợ</a>
+            </li>
+        </ul>
+        @if (ViewBag.HideTopSearch == null)
+        {
+            using (Html.BeginForm("Books", "Home", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0" }))
+            {
+                @Html.TextBox("search", "*", new { @class = "form-control mr-sm-2", type = "search", id = "tbx-search" })
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
+            }
+        }
+    </div>
+</nav>*@
+
+<hr />

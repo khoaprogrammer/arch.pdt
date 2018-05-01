@@ -1,0 +1,137 @@
+﻿@model CIF.Models.BookViewModel
+
+
+@{
+    ViewBag.Title = "EditBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/addbookdetail.less" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+}
+
+@section upscripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+}
+
+<h2>EditBook</h2>
+
+@using (Html.BeginForm("EditBook", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    <div class="form-horizontal">
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PublishDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.PublishDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                        @Html.ValidationMessageFor(model => model.PublishDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ISBN, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ISBN, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ISBN, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PublisherId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(x => x.PublisherId, new SelectList(ViewBag.PublisherList, "Id", "Name"), new { @class = "selectpicker", data_live_search = true })
+                        @Html.ValidationMessageFor(model => model.PublisherId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" id="sec-cover-file">
+                    @Html.Label("Cover", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBox("coverFile", null, new { @class = "form-control", type = "file" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Topics, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        <select class="selectpicker" id="TopicIds" name="TopicIds" multiple>
+                            @foreach (CIF.Models.TopicViewModel topic in ViewBag.TopicList)
+                            {
+                                if (topic.Childs.Count != 0)
+                                {
+                                    <option value="@topic.Id" disabled>@topic.DisplayName</option>
+                                }
+                                else
+                                {
+                                    <option value="@topic.Id" title="@topic.Name" @if (Array.IndexOf(Model.TopicIds, topic.Id) > -1) {
+                                        <text>selected</text>
+                                    }>@topic.DisplayName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AuthorIds, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.ListBoxFor(x => x.AuthorIds, new SelectList(ViewBag.AuthorList, "Id", "Name"), new { @class = "selectpicker", data_live_search = true, multiple = true })
+                        @Html.ValidationMessageFor(model => model.AuthorIds, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DriveCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.DriveCode, new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.DriveCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Description, new { @class = "col-md-1 control-label" })
+                    <div class="col-md-11">
+                        @Html.TextAreaFor(x => x.Description, new { @class = "ckeditor" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.CSS, new { @class = "col-md-1 control-label" })
+                    <div class="col-md-11">
+                        @Html.TextAreaFor(x => x.CSS, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Books")
+</div>

@@ -1,0 +1,191 @@
+﻿@model CIF.Models.CourseSessionView
+
+@{
+    Layout = null;
+    CIF.Models.CourseLessonView less = (CIF.Models.CourseLessonView)ViewBag.Lesson;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Learn</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="~/Content/courselearn.less" />
+    <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/Content/accordion/accordion.less" /> 
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.3/js/tether.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+    <script src="https://walsh9.github.io/videojs-transcript/dist/videojs-transcript.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114685977-1"></script>
+    <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-114685977-1');
+    </script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-4778272217434820",
+    enable_page_level_ads: true
+  });
+    </script>
+    <style>
+        #transcript {
+          width: 100%;
+          height: 100%;
+          margin: auto;
+          font-family: Arial, sans-serif;
+        }
+
+        #transcript-video {
+            height: 100%;
+        }
+
+        .transcript-body {
+          overflow-y: scroll;
+          height: 100%;
+        }
+
+        .transcript-line {
+          position: relative;
+          padding: 5px;
+          cursor: pointer;
+          line-height: 1.3;
+        }
+
+        .transcript-timestamp {
+          position: absolute;
+          display: inline-block;
+          color: #333;
+          width: 50px;
+        }
+
+        .transcript-text {
+          display: block;
+          margin-left: 50px;
+        }
+
+        .transcript-text:hover {
+            color: white;
+        }
+
+
+        .transcript-line:hover {
+          background-color: darkorange;
+        }
+
+        .transcript-line.is-active {
+          background: linear-gradient(#29303b, #29303b, #29303b);
+        }
+
+        .transcript-line.is-active .transcript-timestamp, .transcript-line.is-active .transcript-text {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header"> 
+        <h1>@Model.Course.Name</h1>
+        <h4>Đợt #@Model.Number</h4>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="lesson-title">@less.Title</h2>
+                <hr />
+            </div>
+        </div>
+        <div class="row player">
+            <div class="col-md-8">
+                <video id="video" class="video-js vjs-default-skin" controls preload="auto" data-setup="{}">
+                    <source src="https://drive.google.com/uc?export=download&id=@less.DriveCode" type='video/mp4'>
+                    @if (System.IO.File.Exists(Server.MapPath(Path.Combine(CIF.Models.Globals.CourseCaptionPath, less.Id + ".vtt"))))
+                    {
+                        <track kind="captions" src="@Url.Content(Path.Combine(CIF.Models.Globals.CourseCaptionPath, less.Id + ".vtt"))" srclang="en" label="English" default>
+                    }
+                    <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a web browser that
+                        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                    </p>
+                </video>
+            </div>
+            <div class="col-md-4">
+                <div id="transcript"></div>
+            </div>
+        </div>
+        <div class="curriculum">
+            <div class="accordion-menu">
+                @foreach (var chapter in Model.Course.CourseChapters)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#chap-@chapter.Id">
+                                    <span class="glyphicon glyphicon-folder-close m5"></span>Chương @chapter.Order. @chapter.Title
+                                    <span class="accordion-menu-collapsible-icon glyphicon glyphicon-chevron-down"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="chap-@chapter.Id" class="panel-collapse collapse show">
+                            <div class="panel-body">
+                                <ul class="">
+                                    @{ 
+                                        double daysFromOpen = (DateTime.Today - Model.OpenDate).TotalDays + 1;
+                                        DateTime check = Model.OpenDate.AddDays(3 * daysFromOpen);
+                                    }
+                                    @foreach (var lesson in chapter.CourseLessons)
+                                    {
+                                        if (Model.OpenDate.AddDays(lesson.Order) <= check)
+                                        {
+                                            <li><a href="@Url.Action("Learn", new { Id = Model.Id, chapter = chapter.Id, lesson = lesson.Id })">Bài @lesson.Order. @lesson.Title</a> <span class="badge badge-info">@lesson.Duration</span></li>
+                                            @*if ((DateTime.Today - Model.OpenDate.AddDays(lesson.Order - 1)).TotalDays <= 2)
+                                            {
+                                                <li><a href="@Url.Action("Learn", new { Id = Model.Id, chapter = chapter.Id, lesson = lesson.Id })">Bài @lesson.Order. @lesson.Title</a> <span class="badge badge-info">@lesson.Duration</span></li>
+                                            }
+                                            else
+                                            {
+                                                <li>Bài @lesson.Order. @lesson.Title <span class="badge badge-info">@lesson.Duration</span></li>
+                                            }*@
+                                        }
+                                        else
+                                        {
+                                            <li>Bài @lesson.Order. @lesson.Title <span class="badge badge-info">@lesson.Duration</span></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var video = videojs('video');
+
+        var videoWidth = $("#video").width();
+        var videoHeight = ((videoWidth / 16) * 9);
+        
+        $("#video").css("height", videoHeight.toString() + "px");
+        $("#video").trigger("click");
+        // fire up the plugin
+        var transcript = video.transcript();
+
+
+        // attach the widget to the page
+        var transcriptContainer = document.querySelector('#transcript');
+        transcriptContainer.appendChild(transcript.el());
+
+        $(".transcript-selector").hide();
+        $(".transcript-header").hide();
+        $(".player").css("height", videoHeight.toString() + "px");
+    </script>
+</body>
+</html>

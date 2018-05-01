@@ -1,0 +1,53 @@
+﻿@model List<CIF.Models.BlogEntryView>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/blogindex.less" />    
+}
+
+<div class="row">
+    <div class="col-md-4">
+        
+    </div>
+    <div class="col-md-8">
+        @foreach (var entry in Model)
+        {
+            <div class="entry-preview">
+                <div class="preview-image">
+                    <img src="@entry.PreviewImageUrl" alt="" class="img-responsive">
+                </div>
+                <div class="description">
+                    <span class="type">
+                        <i class="far fa-file-alt"></i>
+                    </span>
+                    <h1>@entry.Title</h1>
+                    <p>@entry.ShortDescription ... <a href="@Url.Action("Entry", "Blog", new { id = entry.Id })">Read more</a></p>
+                    <div class="share">
+                        <ul>
+                            <li>
+                                @*<a href="#">
+                                    <i class="fa fa-share-square-o"></i> 569 Shares
+                                </a>*@
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-eye"></i> @entry.ReadCount lượt xem
+                                </a>
+                            </li>
+                            <li>
+                                @*<a href="#">
+                                    <i class="fa fa-comment"></i> 21 Comments
+                                </a>*@
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" type="image/png" href="@Url.Content("~/Content/Imgs/favicon.png")" />
+    <title>_ReadLayout</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/_readlayout.less" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/safari.css")" />
+    <link rel="stylesheet" type="text/css" href="https://www.safaribooksonline.com/static/css/annotator.@(ViewBag.BookCSS).css" />
+    <link href="//cdn.rawgit.com/noelboss/featherlight/1.7.12/release/featherlight.min.css" type="text/css" rel="stylesheet" />
+    <style>
+        @Html.Raw(ViewBag.BookCustomCss)
+
+        #sbo-rt-content {
+            padding-top: 50px !important;
+        }
+    </style>
+    <style>
+
+        .user-translate-menu {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            display: none;
+            font-size: 20px;
+            background-color: #4060a5;
+            border: none !important;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .featherlight {
+            z-index: 5000 !important;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114685977-1"></script>
+    <script src="//cdn.ckeditor.com/4.9.0/full/ckeditor.js"></script>
+    <script src="//cdn.rawgit.com/noelboss/featherlight/1.7.12/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-114685977-1');
+    </script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-4778272217434820",
+            enable_page_level_ads: true
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+</head>
+<body>
+    <div class="navigation" style="position: fixed; padding: 10px; width: 100%">
+        @if (ViewBag.PrevContent != null)
+        {
+            <button type="button" onclick="location.href = '@Url.Action("Read", "Book", new { code = ViewBag.PrevContent.Code }, this.Request.Url.Scheme)'"><< Prev</button>
+        }
+        @if (ViewBag.NextContent != null)
+        {
+            <button style="float: right;" type="button" onclick="location.href = '@Url.Action("Read", "Book", new { code = ViewBag.NextContent.Code }, this.Request.Url.Scheme)'">Next >></button>
+        }
+    </div>
+    @RenderBody()
+    <button class="user-translate-menu btn btn-info" data-featherlight=".translate-form" data-featherlight-after-content="lightboxOpen()">
+        <i class="fas fa-globe"></i>
+    </button>
+    <div class="translator hidden">
+        <script id="lbdict_plugin_frame" type="text/javascript">!function () { var h = { s: "http://dict.laban.vn", w: 260, h: 350, hl: 2, th: 1 }; function loadScript(t, e) { var n = document.createElement("script"); n.type = "text/javascript", n.readyState ? n.onreadystatechange = function () { ("loaded" === n.readyState || "complete" === n.readyState) && (n.onreadystatechange = null, e()) } : n.onload = function () { e() }, n.src = t, q = document.getElementById("lbdict_plugin_frame"), q.parentNode.insertBefore(n, q) } setTimeout(function () { loadScript("http://stc.laban.vn/dictionary/js/plugin/lbdictplugin.frame.min.js", function () { lbDictPluginFrame.init(h) }) }, 1e3); }();</script>
+    </div>
+    <div class="translator-button">
+        <button class="btn-show-translator"><i class="far fa-comment-alt"></i></button>
+    </div>
+    <div class="translator-google">
+        <div class="translator-google-guide">
+            Tô đen vùng dịch + bấm <strong>T</strong>
+        </div>
+        <div class="translator-google-loading hidden">
+            <i class="fas fa-spinner fa-spin"></i> Đang dịch ...
+        </div>
+        <div class="translator-google-result hidden">
+
+        </div>
+    </div>
+    <div class="translate-form">
+        
+    </div>
+    <script src="//static.getclicky.com/js" type="text/javascript"></script>
+    <script type="text/javascript">try{ clicky.init(101104421); }catch(e){}</script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101104421ns.gif" /></p></noscript>
+    <script>
+        var html = '<h3 style="margin-bottom: 10px;">Nội dung gốc</h3><div class="original-content" style="margin-bottom: 10px;"></div><h3 style="margin-bottom: 10px;">Nội dung dịch</h3><form action="/Book/TranslateBook" data-ajax="true" data-ajax-method="POST" data-ajax-success="translateSuccess" id="form0" method="post"><textarea class="form-control" cols="20" id="translateContent" name="translateContent" rows="2"></textarea>@Html.Hidden("locationCode", "")@Html.Hidden("bookId", (int)ViewBag.BookId)<button style="margin-top: 10px;">Xác nhận</button></form>';
+
+
+        var tmp_translate = "";
+        var hover_content = "";
+        var location_code = "";
+
+        $(document).ready(function () {
+            $(this).bind("contextmenu", function (e) {
+
+                e.preventDefault();
+
+            });
+        });
+
+        $(document).on("click", ".btn-show-translator", function() {
+            $(".translator").toggleClass("hidden");
+        });
+
+        $(document).on("mouseup", document, function (e) {
+            if (window.getSelection) {
+                tmp_translate = window.getSelection().toString();
+            } else if (document.selection && document.selection.type != "Control") {
+                tmp_translate = document.selection.createRange().text;
+            }
+            console.log(tmp_translate);
+        });
+
+        $(document).on("click", document, function () {
+            $(".translator-google-guide").removeClass("hidden");
+            $(".translator-google-loading").addClass("hidden");
+            $(".translator-google-result").addClass("hidden");
+        });
+
+        $(document).on("keypress", document, function (e) {
+            if (e.which === 116) {
+                if (tmp_translate != "") {
+                    $(".translator-google-guide").addClass("hidden");
+                    $(".translator-google-result").addClass("hidden");
+                    $(".translator-google-loading").removeClass("hidden");
+                    $.ajax("@Url.Action("Translate", "Book")", {
+                        type: "POST",
+                        data: {
+                            text: tmp_translate
+                        },
+                        success: function (result) {
+                            $(".translator-google-loading").addClass("hidden");
+                            $(".translator-google-result").removeClass("hidden").html(result)
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            alert(err.Message);
+                        }
+                    });
+                } else {
+                    $(".translator-google-guide").removeClass("hidden");
+                    $(".translator-google-loading").addClass("hidden");
+                    $(".translator-google-result").addClass("hidden");
+                }
+            }
+        });
+
+        $(document).on("mouseenter", "p", function () {
+            var position = $(this).position();
+            $(".user-translate-menu").css("top", position.top + parseInt($(this).css("margin-top")) + "px");
+            $(".user-translate-menu").css("left", position.left - 60 + "px");
+            $(".user-translate-menu").show();
+            hover_content = $('<div>').append($(this).clone()).html();
+            location_code = $(this).attr("id");
+        });
+
+        function lightboxOpen() {
+            $(".featherlight-inner").html(html);
+            $(".original-content").html(hover_content);
+            $("#locationCode").val(location_code);
+            CKEDITOR.replace("translateContent");
+            CKEDITOR.instances['translateContent'].setData(hover_content);
+        }
+
+        function translateSuccess(data) {
+            if (data) {
+                $.featherlight.current().close();
+                alert("Xin cám ơn bạn đã tham gia dich sách xây dựng website!");
+            }
+        }
+
+    </script>
+    <script type="text/javascript">var lbplugin_event_opt={"extension_enable":true,"dict_type":1,"dbclk_event":{"trigger":"none","enable":true,"display":1},"select_event":{"trigger":"none","enable":false,"display":1}};function loadScript(t,e){var n=document.createElement("script");n.type="text/javascript",n.readyState?n.onreadystatechange=function(){("loaded"===n.readyState||"complete"===n.readyState)&&(n.onreadystatechange=null,e())}:n.onload=function(){e()},n.src=t,document.getElementsByTagName("head")[0].appendChild(n)}setTimeout(function(){null==document.getElementById("lbdictex_find_popup")&&loadScript("http://stc.laban.vn/dictionary/js/plugin/lbdictplugin.min.js?"+Date.now()%1e4,function(){lbDictPlugin.init(lbplugin_event_opt)})},1e3);</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CIF.Models.TopicViewModel>
+
+@{
+    ViewBag.Title = "Topics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/topics.less" />    
+}
+
+<div class="heading">
+    <div class="col-md-4">
+        <h2>Topics</h2>
+    </div>
+    <div class="col-md-8">
+        <a href="@Url.Action("AddTopic", "Admin")" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+    </div>
+</div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage.ToString()
+    </div>
+}
+@if (ViewBag.CompleteMessage != null)
+{
+    <div class="alert alert-success">
+        @Html.Raw(ViewBag.CompleteMessage.ToString())
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Level)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.Raw(item.DisplayName.Replace("-", "&nbsp;"))
+        </td>
+        <td>
+            @item.Level
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditTopic", new { Id=item.Id }) |
+            @Html.ActionLink("Delete", "DeleteTopic", new { Id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

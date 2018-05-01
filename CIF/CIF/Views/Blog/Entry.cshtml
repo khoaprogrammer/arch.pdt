@@ -1,0 +1,32 @@
+﻿@model CIF.Models.BlogEntryView
+
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/blogindex.less" />
+    <style>
+        .entry-content img {
+            max-width: 100%;
+            height: unset !important;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+        <div class="entry-img">
+            <img class="img-responsive" src="@Model.PreviewImageUrl" />
+        </div>
+        <div class="entry-meta">
+            <h1>@Model.Title</h1>
+            <p><i><b>@Model.PostTime.ToString("dd/MM/yyyy")</b></i></p>
+        </div>
+        <div class="entry-content">
+            @Html.Raw(Model.Content)
+        </div>
+    </div>
+</div>
+

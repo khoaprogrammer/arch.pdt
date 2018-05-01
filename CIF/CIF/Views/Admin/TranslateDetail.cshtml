@@ -1,0 +1,34 @@
+﻿@model CIF.Models.TranslateContentView
+
+@{
+    ViewBag.Title = "TranslateDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string original = (string)ViewBag.Original;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Nội dung gốc</h3>
+        <div class="original">
+            @Html.Raw(original)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Nội dung dịch</h3>
+        <div class="translated">
+            @Html.TextArea("translated", Model.Data, new { @class="ckeditor" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("ApproveTranslate", "Admin", FormMethod.Post))
+        {
+            @Html.HiddenFor(x => x.Id)
+            <button type="submit" class="btn btn-success">Phê duyệt</button>
+        }
+    </div>
+</div>
+

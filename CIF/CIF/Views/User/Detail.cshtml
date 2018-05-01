@@ -1,0 +1,122 @@
+﻿@model CIF.Models.UserView
+
+@using CIF.Models;
+
+@{
+    ViewBag.Title = "MyCourses";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/courses.less" />     
+    <link href="~/Content/ribbon/corner-ribbon.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Content/vertical-tabs.css" />
+    <style>
+        .card__inner {
+            position: relative;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex flex-row mt-3">
+            <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation">
+                <li class="nav-item">
+                    <a href="#account-info" class="nav-link active" data-toggle="tab" role="tab" aria-controls="account-info">Thông tin tài khoản</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#my-courses" class="nav-link" data-toggle="tab" role="tab" aria-controls="my-courses">Khóa học của tôi</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#favorite-books" class="nav-link" data-toggle="tab" role="tab" aria-controls="favorite-books">Sách yêu thích</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contribution" class="nav-link" data-toggle="tab" role="tab" aria-controls="contribution">Đóng góp</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="account-info" role="tabpanel">
+                </div>
+                <div class="tab-pane fade" id="my-courses" role="tabpanel">
+                    @foreach (var course in Model.CourseSessions)
+                    {
+                        @Html.Partial("~/Views/Partials/_CourseCardPartial.cshtml", CIF.Models.ModelConverter.CourseSessionToView(course))
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="col-md-3">
+
+    </div>
+    <div class="col-md-9">
+        @foreach (CIF.DB.CourseSession item in Model.CourseSessions.OrderByDescending(x => x.OpenDate).ToList())
+        {
+            CourseView course = ModelConverter.CourseToView(item.Course);
+            <div class="card__inner">
+                <div class="ribbon-wrapper">
+                    @if (item.OpenDate.AddDays(course.LessonCount) < DateTime.Today)
+                    {
+                        <div class="ribbon ribbon-red">Đã đóng</div>
+                    }
+                    else
+                    {
+                        <div class="ribbon ribbon-green">Đang mở</div>
+                    }
+                </div>
+                <div class="search-course-card--card--left-col--3kKip">
+                    <a href="@Url.Action("Index", "Course", new { Id = item.Id })">
+                        <img src="@Url.Content(Path.Combine(CIF.Models.Globals.CourseImagePath, item.Course.Id + ".png"))" alt="course image" width="304" height="171" class="card__image">
+                    </a>
+                </div>
+                <div class="fx">
+                    <div class="card__head">
+                        <a href="@Url.Action("Index", "Course", new { Id = item.Id })" class="card__title">@item.Course.Name</a>
+                        <div class="bestseller-info " data-purpose="bestseller-badge">
+                            <span class="badge badge-accented yellow">Best Seller</span>
+                        </div>
+                    </div>
+                    <div class="middle-col">
+                        <p class="card__instructor">
+                            <a href="/the-web-developer-bootcamp/#instructor" class="card__instructor">
+                                <span><strong>Đợt: </strong></span><spans style="color: red"><strong>#@item.Number</strong></spans>
+                            </a>
+                        </p>
+                        <p class="card__subtitle">
+                            @item.Course.ShortDescription
+                        </p>
+                        <div class="card__metadata">
+                            <span class="card__meta-item">
+                                <span class="card__icon fa fa-play-circle"></span>346 lectures
+                            </span>
+                            <span class="card__meta-item">
+                                <span class="card__icon fa fa-clock-o"></span>43 hours
+                            </span>
+                            <span class="card__meta-item">
+                                <span class="card__icon fa fa-sliders"></span>All levels
+                            </span>
+                        </div>
+                    </div>
+                    <div class="right-col">
+                        <div>
+                            <span class="card__price"><i class="fa fa-calendar"></i> @item.OpenDate.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <a href="#" class="card__a">
+                            <div class="star-rating">
+                                <span style="width:50%;">
+                                </span>
+                            </div>
+                        </a>
+                        <div class="card__star">
+                            <a href="/the-web-developer-bootcamp/#reviews" class="review-count">
+                                <div>(43,273 ratings)</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>*@
+</div>

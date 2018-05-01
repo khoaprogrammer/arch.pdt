@@ -1,0 +1,95 @@
+﻿@model CIF.Models.LoginViewModel
+
+@{  
+    double reqExp = CIF.Models.Globals.Level1EXP;
+    if (ViewBag.User != null)
+    {
+        for (int i = 1; i < ViewBag.User.Level + 1; i++)
+        {
+            reqExp = (reqExp + 0.5 * reqExp);
+        }
+    }
+
+    double percentage = 0;
+    if (ViewBag.User != null)
+    {
+        percentage = (ViewBag.User.EXP / reqExp) * 100;
+    }
+}
+
+<div class="login-form-wrapper">
+    <div class="login-form">
+        @if (ViewBag.User != null)
+        {
+            <text>Xin chào, <br />
+                <strong>@ViewBag.User.Email</strong> <br />
+        <a href="@Url.Action("Detail", "User")"><i class="fas fa-user"></i> Thông tin tài khoản</a> <br />
+        <a href="@Url.Action("LogOff", "Account")"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+        <hr />
+        <div class="container">
+            <div class="row">
+                <div class="col-6" style="text-align: left; padding: 0 !important">
+                    Level: <strong>@(ViewBag.User.Level + 1)</strong>
+                </div>
+                <div class="col-6" style="text-align: right; padding: 0 !important">
+                    PL: <strong style="color: red">@ViewBag.User.PL</strong>
+                </div>
+            </div>
+        </div>
+        <div></div>
+        <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: @percentage%" aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-6" style="text-align: left; padding: 0 !important; font-size: 10px;">
+                    <span style="float: left">@ViewBag.User.EXP</span>
+                </div>
+                <div class="col-6" style="text-align: right; padding: 0 !important; font-size: 10px;">
+                    @if (ViewBag.User.Level == 0)
+                    {
+                        <text>@CIF.Models.Globals.Level1EXP</text>
+                    }
+                    else
+                    {
+                        <text>@reqExp</text>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <strong><i class="fab fa-bitcoin"></i> @ViewBag.User.CIF</strong> &nbsp; &nbsp;
+                @if (ViewBag.User.IsAdsFree)
+                {
+                    <i class="fas fa-clock"></i> @((int)ViewBag.User.TimeStorage / 60)<text>p</text>@((int)ViewBag.User.TimeStorage % 60)<text>s</text>
+                }
+            </div>
+        </div>
+        </text>
+        }
+        else
+        {
+            using (Html.BeginForm("Login", "Account", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label class="control-label"><b>Email:</b></label>
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control-sm col-md-12" })
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label"><b>Mật khẩu:</b></label>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label"><a href="@Url.Action("ForgotPassword", "Account")">Quên?</a></label>
+                        </div>
+                    </div>
+                    @Html.PasswordFor(x => x.Password, new { @class = "form-control-sm col-md-12" })
+                </div>
+                <center><a href="@Url.Action("Register", "Account")" class="btn btn-sm btn-success">Register <i class="far fa-edit"></i></a>&nbsp;<button type="submit" class="btn btn-sm btn-success">Login <i class="fa fa-angle-right"></i></button></center>
+            }
+        }
+    </div>
+</div>

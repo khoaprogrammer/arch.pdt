@@ -1,0 +1,33 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <style type="text/css">
+        #TextArea1 {
+            height: 162px;
+            width: 503px;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("SQL", "Admin", FormMethod.Post))
+    {
+        <div>
+            @Html.TextArea("sql", new { style= "width: 100%; height: 500px" })
+        </div>
+        <button type="submit">Submit</button>
+        <p>
+            <asp:Label ID="lbeError" runat="server" Text="Label"></asp:Label>
+        </p>
+        <p>
+            <asp:PlaceHolder ID="PlaceHolder1" runat="server"></asp:PlaceHolder>
+        </p>
+    }
+</body>
+</html>
