@@ -1,0 +1,132 @@
+﻿@model CIF.Models.ArchModelView
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/bookindex.less" />
+}
+
+@section HeadScripts {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12">
+                <center>
+                    @if (ViewBag.SketChup != null)
+                    { <img src="@Url.Content("~/Content/ImageSketChup/" + Model.Id + ".png")" height="400" width="250" class="img-preview" />}
+
+                    else
+                    {
+                        <img src="@Url.Content("~/Content/Image3DMax/" + Model.Id + ".png")" height="400" width="20" class="img-preview" />
+                    }
+                </center>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 btn-wrapper">
+                <a href="@Model.DownloadLink" class="btn btn-success" id="btn-read"><i class="fa fa-book" aria-hidden="true"></i>Tải về</a>
+            </div>
+        </div>
+       @*
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <i class="fa fa-eye"></i><strong> Visit: </strong>@Model.VisitCount
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <i class="fa fa-book"></i><strong> Read: </strong>@Model.ReadCount
+            </div>
+        </div>*@
+            
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12 bool-title">
+                <h2>@Model.Name</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 book-authors">
+                
+            </div>
+            <div class="col-md-12 book-breadcrum">
+                @*@if (Model.BreadCrums != null)
+                {
+                    foreach (var bread in Model.BreadCrums)
+                    {
+                        <div>
+                            @for (int i = 0; i < bread.Count; i++)
+                            {
+                                if (i != 0)
+                                {
+                                    <text> > </text>
+                                }
+                                <a href="#" class="bc-item"><b>@bread[i].Name</b></a>
+                            }
+                        </div>
+                    }
+                }*@
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12 book-description">
+                @Html.Raw(Model.DESC)
+            </div>
+        </div>
+    @*    @if (Model.DriveCode == null)
+        {
+            <hr />
+            <div class="row">
+                <div class="col-md-12 book-toc" id="book-toc">
+                    <input class="search form-control" placeholder="Search contents ..." />
+                    <ul class="list" id="style-2">
+                        @foreach (var toc in Model.TOCLines)
+                        {
+                            <li>
+                                @Html.Raw(toc.DisplayPrefix) <a href="@(Url.Action("Read", "Book", new { Id = Model.Id, code = toc.Content.Code }))#@toc.Anchor" target="_blank" class="title">@toc.Title</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }*@
+    </div>
+</div>
+@*
+@section Scripts {
+    <script>
+        var options = {
+            valueNames: ['title']
+        };
+
+        var userList = new List('book-toc', options);
+
+        $("#btn-read").click(function () {
+            $.ajax("@Url.Action("AddBookRead", "Book")", {
+                type: "POST",
+                data: {
+                    "id": "@Model.Id"
+                },
+                success: function (result) {
+                    if (result) {
+                        @if (Model.DriveCode == null)
+                        {
+                            <text>location.href = "@Url.Action("Read", "Book", new { id = Model.Id, code = ViewBag.FirstContent }, this.Request.Url.Scheme)"</text>
+                        }
+                        else
+                        {
+                            <text>location.href = "@Url.Action("PDFRead", "Book", new { Id = Model.Id }, this.Request.Url.Scheme)"</text>
+                        }
+                    }
+                }
+            })
+        });
+    </script>
+}*@

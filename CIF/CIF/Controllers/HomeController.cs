@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,15 +25,24 @@ namespace CIF.Controllers
         [ShowStats]
         public ActionResult Index()
         {
-            List<BookViewModel> lastestBooks = UIHelper.GetLastestBooks(10);
-            ViewBag.LastestBooks = lastestBooks;
-            List<BlogEntryView> lastestEntries = UIHelper.GetLastestBlogEntries(Globals.NumOfLastestBlogEntryShow);
-            ViewBag.LastestBlogEntries = lastestEntries;
+            /* List<BookViewModel> lastestBooks = UIHelper.GetLastestBooks(10);
+             ViewBag.LastestBooks = lastestBooks;
+             List<BlogEntryView> lastestEntries = UIHelper.GetLastestBlogEntries(Globals.NumOfLastestBlogEntryShow);
+             ViewBag.LastestBlogEntries = lastestEntries;
+             if (HttpContext.Request.Browser.IsMobileDevice)
+             {
+                 ViewBag.IsMobile = true;
+             }
+             ViewBag.ShowTopSearch = true;*/
+            List<ArchModelView> Max3D = UIHelper.GetAll3DMax();
+            List<ArchModelView> SketChup = UIHelper.GetAllSketChup();
+            ViewBag.Max3D = Max3D;
+            ViewBag.SketChup = SketChup;
             if (HttpContext.Request.Browser.IsMobileDevice)
             {
                 ViewBag.IsMobile = true;
             }
-            ViewBag.ShowTopSearch = true;
+
             return View();
         }
 
@@ -100,5 +110,27 @@ namespace CIF.Controllers
 
             return Content("OK");
         }
+        public ActionResult Max3D(int page = 1, string search = "*")
+        {
+
+            //var books = UIHelper.GetAllBooksView(topicIds, authorId, publisherId, page, search);
+            ViewBag.Search = search;
+            ViewBag.Page = page;
+            Tuple<List<ArchModelView>, int> list = UIHelper.GetAll_Max3D(search, page);
+            ViewBag.TotalCount = list.Item2;
+            return View(list.Item1);
+        }
+        public ActionResult SketChup(int page = 1, string search = "*")
+        {
+
+            //var books = UIHelper.GetAllBooksView(topicIds, authorId, publisherId, page, search);
+            ViewBag.Search = search;
+            ViewBag.Page = page;
+            Tuple<List<ArchModelView>, int> list = UIHelper.GetAll_SketChup(search, page);
+            ViewBag.TotalCount = list.Item2;
+            return View(list.Item1);
+        }
+      
+
     }
 }

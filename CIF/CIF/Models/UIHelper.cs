@@ -31,6 +31,11 @@ namespace CIF.Models
             return topics;
         }
 
+        internal static ArchModelView Get3DMax()
+        {
+            throw new NotImplementedException();
+        }
+
         internal static DocumentView GetDocument(int id)
         {
             Document doc = DBHelper.GetDocument(id);
@@ -143,6 +148,11 @@ namespace CIF.Models
             return tickets.OrderByDescending(x => x.Time).Select(x => ModelConverter.SupportTicketToView(x)).ToList();
         }
 
+        internal static Tuple<List<ArchModel>, int> GetArchModelView(string search, int page)
+        {
+            throw new NotImplementedException();
+        }
+
         public static List<BlogEntryView> GetAllBlogEntries()
         {
             List<BlogEntry> entries = DBHelper.GetAllBlogEntries();
@@ -217,6 +227,66 @@ namespace CIF.Models
         {
             var docs = DBHelper.GetAllDocuments(topicIds, page, search);
             return new Tuple<List<DocumentView>, int>(docs.Item1.Select(x => ModelConverter.DocumentToView(x)).ToList(), docs.Item2);
+        }
+        public static List<ArchModelView> GetAll3DMax()
+        {
+            var list3DMax = DBHelper.GetAll3DMax();
+            return list3DMax.Select(x => ModelConverter.ArchModelToView(x)).ToList();
+        }
+        public static List<ArchModelView> GetAllSketChup()
+        {
+            var listSketChup = DBHelper.GetAllSketChup();
+            return listSketChup.Select(x => ModelConverter.ArchModelToView(x)).ToList();
+        }
+        public static ArchModelView Get3DMax(int id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ArchModel edit = db.ArchModels.FirstOrDefault(x => x.Id == id && x.Type == ModelType.MAX3D);
+            return ModelConverter.ArchModelToView(edit);
+        }
+        public static ArchModelView GetSketChup(int id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ArchModel edit = db.ArchModels.FirstOrDefault(x => x.Id == id && x.Type == ModelType.SKETCHUP);
+            return ModelConverter.ArchModelToView(edit);
+        }
+        public static ArchModelView getArchModelView(int id)
+        {
+            ArchModelView a = ModelConverter.ArchModelToView(DBHelper.getArchModel(id));
+            return a;
+        }
+        public static List<SystemDataView> GetAllSystemDataView() {
+            List<SystemData> a = DBHelper.GetAllSystemData();
+            return a.Select(x => ModelConverter.SystemDataToView(x)).ToList();
+        }
+        public static SystemDataView GetSystemDataView(int id) {
+            SystemData a = DBHelper.GetSystemData(id);
+            return ModelConverter.SystemDataToView(a);
+        }
+        public static List<ArchModelView> GetAllArchModelView() {
+            List<ArchModel> a = DBHelper.GetAllArchModel();
+            return a.Select(x => ModelConverter.ArchModelToView(x)).ToList();
+        }
+        public static Tuple<List<ArchModelView>, int> GetAll_Max3D(string search, int page = 1) {
+            List<ArchModelView> list = UIHelper.GetAll3DMax();
+            if (search != "*")
+            {
+                //list = list.Where(x => x.Id == 3).ToList();
+                list = list.Where(x => x.Name.ToUpper().Contains(search.ToUpper())).ToList();
+                // query = query.Where(x => x.Name.ToUpper().Contains(search.ToUpper()));
+            }
+            return new Tuple<List<ArchModelView>, int>(list.OrderByDescending(x => x.AddDate).Skip((page - 1) * 20).Take(20).ToList(), list.Count);
+        }
+        public static Tuple<List<ArchModelView>, int> GetAll_SketChup(string search, int page = 1)
+        {
+            List<ArchModelView> list = UIHelper.GetAllSketChup();
+            if (search != "*")
+            {
+                //list = list.Where(x => x.Id == 3).ToList();
+                list = list.Where(x => x.Name.ToUpper().Contains(search.ToUpper())).ToList();
+                // query = query.Where(x => x.Name.ToUpper().Contains(search.ToUpper()));
+            }
+            return new Tuple<List<ArchModelView>, int>(list.OrderByDescending(x => x.AddDate).Skip((page - 1) * 20).Take(20).ToList(), list.Count);
         }
     }
 }

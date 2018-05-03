@@ -816,8 +816,113 @@ namespace CIF.Controllers
 
         public ActionResult Max3D()
         {
-            List<ArchModel>
+            List<ArchModelView> list = UIHelper.GetAll3DMax();
+
+            return View(list);
+        }
+        public ActionResult SketChup()
+        {
+            List<ArchModelView> list = UIHelper.GetAllSketChup();
+            return View(list);
+        }
+        public ActionResult Add3DMax()
+        {
+
             return View();
         }
+        [HttpPost]
+        public ActionResult Add3DMax(ArchModelView model, HttpPostedFileBase image)
+        {
+            model.Type = ModelType.MAX3D;
+            model.AddDate = DateTime.Now;
+            int id = DBHelper.Add3DMax(model);
+            image.SaveAs(Server.MapPath("~/Content/Image3DMax/" + id + ".png"));
+            return RedirectToAction("Max3D");
+        }
+        public ActionResult Edit3DMax(int id)
+        {
+            ArchModelView model = UIHelper.Get3DMax(id);
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Edit3DMax(ArchModelView model, HttpPostedFileBase image)
+        {
+            model.AddDate = DateTime.Now;
+            DBHelper.Edit3DMax(model);
+            image.SaveAs(Server.MapPath("~/Content/Image3DMax/" + model.Id + ".png"));
+            return RedirectToAction("Max3D");
+        }
+        public ActionResult Delete3DMax(int id)
+        {
+
+            ArchModelView a = UIHelper.Get3DMax(id);
+            DBHelper.Delete3DMax(a);
+            return RedirectToAction("Max3D");
+        }
+        public ActionResult AddSketChup()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddSketChup(ArchModelView model, HttpPostedFileBase image)
+        {
+            model.Type = ModelType.SKETCHUP;
+            model.AddDate = DateTime.Now;
+            int id = DBHelper.AddSketChup(model);
+            image.SaveAs(Server.MapPath("~/Content/ImageSketChup/" + id + ".png"));
+            return RedirectToAction("SketChup");
+        }
+        public ActionResult EditSketChup(int id)
+        {
+            ArchModelView model = UIHelper.GetSketChup(id);
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult EditSketChup(ArchModelView model, HttpPostedFileBase image)
+        {
+            model.AddDate = DateTime.Now;
+            model.Type = ModelType.SKETCHUP;
+            DBHelper.EditSketChup(model);
+            image.SaveAs(Server.MapPath("~/Content/ImageSketChup/" + model.Id + ".png"));
+            return RedirectToAction("SketChup");
+        }
+        public ActionResult DeleteSketChup(int id)
+        {
+            ArchModelView a = UIHelper.GetSketChup(id);
+            DBHelper.DeleteSketChup(a);
+            return RedirectToAction("SketChup");
+        }
+        public ActionResult DataSystem()
+        {
+            List<SystemDataView> list = UIHelper.GetAllSystemDataView();
+            return View(list);
+        }
+        public ActionResult AddDataSystem()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddDataSystem(SystemDataView model)
+        {
+            DBHelper.AddDataSystem(model);
+            return RedirectToAction("DataSystem");
+        }
+        public ActionResult EditSystemData(int id)
+        {
+            SystemDataView model = UIHelper.GetSystemDataView(id);
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult EditSystemData(SystemDataView model)
+        {
+            DBHelper.EditSystemData(model);
+            return RedirectToAction("DataSystem");
+        }
+        public ActionResult DeleteSystemData(int id)
+        {
+            DBHelper.DeleteSystemData(id);
+            return RedirectToAction("DataSystem");
+        }
+
     }
 }

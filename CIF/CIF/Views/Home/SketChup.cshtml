@@ -1,0 +1,129 @@
+﻿@model List<CIF.Models.ArchModelView>
+
+@{
+    ViewBag.Title = "SketChup";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/books.less" />
+    <style>
+        .qc-main-bottom iframe {
+            margin: 0 auto;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="filter-sidebar">
+            <div class="col-md-12">
+                <center>
+                    <h3>Advanced Search</h3>
+                </center>
+            </div>
+            @using (Html.BeginForm())
+            {
+                <div class="form-group">
+                    @Html.Label("Keyword", new { @class = "col-md-12" })
+                    <div class="col-md-12">
+                        @Html.TextBox("search", (string)ViewBag.Search, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <center>
+                        <button type="submit" class="btn btn-success">Search</button>
+                    </center>
+                </div>
+            }
+        </div>
+        @*<div class="qc">
+                <div id="SC_TBlock_494418" class="SC_TBlock">loading...</div>
+            </div>*@
+    </div>
+
+
+
+
+    <div class="col-md-9">
+        <div class="row qc-main-top">
+            <div id="venus-130059"></div>
+        </div>
+        <div class="list">
+            @foreach (var book in Model)
+            {
+                <article class="list--item">
+                    <a href="@Url.Action("Index", "Arch", new { Id = book.Id })">
+                        <figure>
+                            <center><img src="@Url.Content("~/Content/ImageSketChup/"+book.Id+".png")" alt="" height="250" width="200"></center>
+                            <header>
+                                <h2>@book.Name</h2>
+                            </header>
+                            <figcaption>
+                                camhoi
+                            </figcaption>
+                        </figure>
+                    </a>
+                </article>
+            }
+        </div>
+        <div class="row">
+            <nav aria-label="Page navigation example" id="pagination">
+                <ul class="pagination">
+                    <li class="page-item @if ((int)ViewBag.Page == 1) { <text>disabled</text> } ">
+                        <a class="page-link" href="@Url.Action("SketChup", "Home", new { page = ViewBag.Page - 1, search = Request.Params["search"] })">
+                            Previous
+                        </a>
+                    </li>
+                    @if (ViewBag.Page > 1)
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Action("SketChup", "Home", new { page = ViewBag.Page - 1, search = Request.Params["search"]})">@(ViewBag.Page - 1)</a></li>
+                    }
+                    <li class="page-item active"><a class="page-link" href="#">@ViewBag.Page</a></li>
+                    @if (Model.Count == 20)
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Action("SketChup", "Home", new { page = ViewBag.Page + 1 , search = Request.Params["search"]})">@(ViewBag.Page + 1)</a></li>
+                    }
+                    <li class="page-item @if (Model.Count != 20) { <text>disabled</text> }"><a class="page-link" href="@Url.Action("SketChup", "Home", new { page = ViewBag.Page + 1 , search = Request.Params["search"]})">Next</a></li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">
+                            @if (Model.Count == 20)
+                            {
+                                @(20 * (int)ViewBag.Page)<text>/@ViewBag.TotalCount</text>
+                            }
+                            else
+                            {
+                                @(20 * ((int)ViewBag.Page - 1) + Model.Count)<text>/@ViewBag.TotalCount</text>
+                            }
+
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        @*<div class="row qc-main-bottom" style="margin-top: 20px; text-align: center;">
+                <!-- Begin BidVertiser code -->
+                <SCRIPT data-cfasync="false" SRC="//bdv.bidvertiser.com/BidVertiser.dbm?pid=801669&bid=1931597" TYPE="text/javascript"></SCRIPT>
+                <!-- End BidVertiser code -->
+            </div>*@
+    </div>
+</div>
+@*
+    @section Scripts {
+        <script>
+            $(".topicFilter").extendSelect();
+        </script>
+        <script type="text/javascript">
+            (sc_adv_out = window.sc_adv_out || []).push({
+                id : "494418",
+                domain : "n.ads3-adnow.com"
+            });
+        </script>
+        <script type="text/javascript" src="//st-n.ads3-adnow.com/js/adv_out.js"></script>
+        <div id="venus-130059"></div>
+        <script type="text/javascript"> var venus130059 = { blockId: "130059", multi: 1, async: true }; (function (w, d, o, t) { o.send = function () { (o.queue = o.queue || []).push(arguments); }; var s = d.createElement(t); if (o.async) s.async = 1; s.src = "//block.s2blosh.com/rotator-v2/130059.js"; var i = d.getElementsByTagName(t)[0]; i.parentNode.insertBefore(s, i); o.send("pageview"); })(window, document, venus130059, "script"); </script>
+    }*@
+
+

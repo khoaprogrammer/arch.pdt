@@ -245,5 +245,45 @@ namespace CIF.Models
                 PageCount = doc.PageCount
             };
         }
+        public static ArchModelView ArchModelToView(ArchModel a)
+        {
+            return new ArchModelView
+            {
+                Id = a.Id,
+                Name = a.Name,
+                DownloadLink = a.DownloadLink,
+                Type = a.Type,
+                AddDate = a.AddDate,
+                DESC = a.DESC
+            };
+        }
+        public static ArchModel ViewToArchModel(ArchModelView a)
+        {
+            return new ArchModel
+            {
+                Id = a.Id,
+                Name = a.Name,
+                DownloadLink = a.DownloadLink,
+                Type = a.Type,
+                AddDate = a.AddDate,
+                DESC = a.DESC
+            };
+        }
+        public static SystemData ViewToSystemDataModel(SystemDataView a)
+        {
+            return new SystemData
+            {
+                Id = a.Id,
+                Data = a.Data,
+                Code = a.Code
+
+            };
+
+        }
+
+        internal static List<ArchModelView> ArchModelToView(Func<List<ArchModel>> getAllArchModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

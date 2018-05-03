@@ -1,7 +1,8 @@
 ﻿@{
     ViewBag.Title = "Coding is FUN - Learn coding with books";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    var newBooks = (List<CIF.Models.BookViewModel>)ViewBag.LastestBooks;
+    var Max3D = (List<CIF.Models.ArchModelView>) ViewBag.Max3D;
+    var SketChup = (List<CIF.Models.ArchModelView>) ViewBag.SketChup;
 }
 
 
@@ -64,18 +65,18 @@
 }
 
 <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
                 <h3>3D MAX</h3>
                 @if (ViewBag.IsMobile != null)
                 {
                     <div class="new-books">
-                        @foreach (CIF.Models.BookViewModel book in newBooks)
+                        @foreach (CIF.Models.ArchModelView book in Max3D)
                         {
                             <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
-                                <a href="@Url.Action("Index", "Book", new { id = book.Id })">
-                                    <img src="@Url.Content(Path.Combine(CIF.Models.Globals.BookCoverPath, book.Id + ".png"))" height="200" />
+                                <a href="@Url.Action("Index", "Arch", new { id = book.Id })">
+                                    <img src="@Url.Content("~/Content/Image3DMax/"+ book.Id +".png")" height="200" width="150"/>
                                 </a>
                             </div>
                         }
@@ -84,21 +85,21 @@
                 else
                 {
                     <div class="new-books">
-                        @foreach (CIF.Models.BookViewModel book in newBooks.Take(5))
+                        @foreach (CIF.Models.ArchModelView book in Max3D.Take(5))
                         {
                             <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
-                                <a href="@Url.Action("Index", "Book", new { id = book.Id })">
-                                    <img src="@Url.Content(Path.Combine(CIF.Models.Globals.BookCoverPath, book.Id + ".png"))" height="200" />
+                                <a href="@Url.Action("Index", "Arch", new { id = book.Id })">
+                                    <img src="@Url.Content("~/Content/Image3DMax/"+ book.Id +".png")" height="200" width="150"/>
                                 </a>
                             </div>
                         }
                     </div>
                     <div class="new-books">
-                        @foreach (CIF.Models.BookViewModel book in newBooks.Skip(5).Take(5))
+                        @foreach (CIF.Models.ArchModelView book in Max3D.Skip(5).Take(5))
                         {
                             <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
-                                <a href="@Url.Action("Index", "Book", new { id = book.Id })">
-                                    <img src="@Url.Content(Path.Combine(CIF.Models.Globals.BookCoverPath, book.Id + ".png"))" height="200" />
+                                <a href="@Url.Action("Index", "Arch", new { id = book.Id })">
+                                    <img src="@Url.Content("~/Content/Image3DMax/"+ book.Id +".png")" height="200" width="150"/>
                                 </a>
                             </div>
                         }
@@ -109,21 +110,57 @@
             <div id="SC_TBlock_494922" class="SC_TBlock">loading...</div>
         </div>*@
                 <hr />
-                <h3>SKETCHUP</h3>
-                <div class="new-posts container-fluid">
-                    <section class="grid-section">
-                        @foreach (CIF.Models.BlogEntryView entry in ViewBag.LastestBlogEntries)
+                <h3>SKETCHUP</h3>      
+                @if (ViewBag.IsMobile != null)
+                {
+                    <div class="new-books">
+                        @foreach (CIF.Models.ArchModelView book in SketChup)
                         {
-                            <a href="@Url.Action("Entry", "Blog", new { Id = entry.Id })">
+                            <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
+                                <a href="@Url.Action("Index", "Arch", new { id = book.Id })">
+                                    <img src="@Url.Content("~/Content/ImageSketChup/"+ book.Id +".png")" height="200" width="150"/>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="new-books">
+                        @foreach (CIF.Models.ArchModelView book in SketChup.Take(5))
+                        {
+                            <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
+                                <a href="@Url.Action("Index", "Arch", new { id = book.Id })">
+                                    <img src="@Url.Content("~/Content/ImageSketChup/"+ book.Id +".png")" height="200" width="150"/>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <div class="new-books">
+                        @foreach (CIF.Models.ArchModelView book in SketChup.Skip(5).Take(5))
+                        {
+                            <div class="slick-item" data-toggle="tooltip" data-placement="top" title="@book.Name">
+                                <a href="@Url.Action("Index", "Arch", new { id = book.Id })">
+                                    <img src="@Url.Content("~/Content/ImageSketChup/"+ book.Id +".png")" height="200" width="150"/>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                @*<div class="new-posts container-fluid">
+                    <section class="grid-section">
+                        @foreach (CIF.Models.ArchModelView sketchup in ViewBag.SketChup)
+                        {
+                            <a href="@Url.Action("Entry", "Blog", new { Id = sketchup.Id })">
                                 <article class="blog-card">
                                     <div class="blog-card__image">
-                                        <img src="@entry.PreviewImageUrl">
+                                        <img src="@Url.Content("~/Content/Image3DMax/"+ sketchup.Id +".png")" height="200">
                                     </div>
                                     <div class="blog-card__title">
-                                        <p> @entry.Title </p>
+                                        <p>@sketchup.Name </p>
                                     </div>
 
-                                    <div class="blog-card__details">
+                                    @*<div class="blog-card__details">
                                         <span class="blog-card__details--time"><i class="far fa-clock"></i> @entry.PostTime.ToString("MMM") </span>
                                         <span class="blog-card__details--view"><i class="fa fa-eye"></i> @entry.ReadCount </span>
                                     </div>
@@ -131,25 +168,12 @@
                             </a>
                         }
                     </section>
-                </div>
+                </div>*@
+
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="row">
-            <div class="col-md-12">
-                <h3>HƯỚNG DẪN</h3>
-                <div class="content-box">
-                    <div class="box-data">
-                        <p>
-                            <a href="http://phongdaotao.com/Blog/Entry/5">Dịch sách</a><br />
-                            <a href="http://phongdaotao.com/Blog/Entry/15">Kinh nghiệm & tiền tệ</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>
 
 @*<div class="row qc-new-books-top">

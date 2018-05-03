@@ -764,5 +764,113 @@ namespace CIF.Models
             var context = ApplicationDbContext.Create();
             return new Tuple<int, int, int>(context.Books.Count(), 0, context.Users.Count());
         }
+      
+        public static List<ArchModel> GetAll3DMax() {
+            ApplicationDbContext db = new ApplicationDbContext();
+            List<ArchModel> list = db.ArchModels.Where(x=>x.Type==ModelType.MAX3D).OrderByDescending(x => x.AddDate).ToList();
+            return list;
+        }
+        public static List<ArchModel> GetAllSketChup()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            List<ArchModel> list = db.ArchModels.Where(x => x.Type == ModelType.SKETCHUP).OrderByDescending(x => x.AddDate).ToList();
+            return list;
+        }
+        public static int Add3DMax(ArchModelView a) {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ArchModel add = ModelConverter.ViewToArchModel(a);
+            db.ArchModels.Add(add);
+            db.SaveChanges();
+            return add.Id;
+        }
+        public static void Edit3DMax(ArchModelView a)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ArchModel edit = db.ArchModels.FirstOrDefault(x => x.Id == a.Id);
+            edit.Name = a.Name;
+            edit.Type = a.Type;
+            edit.Id = a.Id;
+            edit.DownloadLink = a.DownloadLink;
+            edit.AddDate = a.AddDate;
+            edit.DESC = a.DESC;
+            db.SaveChanges();
+        }
+        public static void Delete3DMax(ArchModelView a) {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ArchModel delete = db.ArchModels.FirstOrDefault(x => x.Id == a.Id);
+            db.ArchModels.Remove(delete);
+            db.SaveChanges();
+        }
+        public static int AddSketChup(ArchModelView a)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ArchModel add = ModelConverter.ViewToArchModel(a);
+            db.ArchModels.Add(add);
+            db.SaveChanges();
+            return add.Id;
+        }
+        public static void EditSketChup(ArchModelView a)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ArchModel edit = db.ArchModels.FirstOrDefault(x => x.Id == a.Id);
+            edit.Name = a.Name;
+            edit.Type = a.Type;
+            edit.Id = a.Id;
+            edit.DownloadLink = a.DownloadLink;
+            edit.AddDate = a.AddDate;
+            edit.DESC = a.DESC;
+            db.SaveChanges();
+        }
+        public static void DeleteSketChup(ArchModelView a)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ArchModel delete = db.ArchModels.FirstOrDefault(x => x.Id == a.Id);
+            db.ArchModels.Remove(delete);
+            db.SaveChanges();
+        }
+        public static ArchModel getArchModel(int id) {
+            ApplicationDbContext db = new ApplicationDbContext();
+            return db.ArchModels.FirstOrDefault(x => x.Id == id);
+        }
+        public static List<ArchModel> GetAllArchModel()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            return db.ArchModels.ToList();
+
+        }
+
+        public static List<SystemData> GetAllSystemData()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            return db.SystemDatas.ToList();
+        }
+        public static void AddDataSystem(SystemDataView data) {
+            ApplicationDbContext db = new ApplicationDbContext();
+            SystemData a = ModelConverter.ViewToSystemDataModel(data);
+            db.SystemDatas.Add(a);
+            db.SaveChanges();
+        }
+        public static SystemData GetSystemData(int id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            SystemData a = db.SystemDatas.FirstOrDefault(x => x.Id == id);
+            return a;
+        }
+        public static void EditSystemData(SystemDataView model) {
+            ApplicationDbContext db = new ApplicationDbContext();
+            SystemData a = db.SystemDatas.FirstOrDefault(x => x.Id == model.Id);
+            a.Id = model.Id;
+            a.Code = model.Code;
+            a.Data = model.Data;
+            db.SaveChanges();
+        }
+        public static void DeleteSystemData(int id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            SystemData a = db.SystemDatas.FirstOrDefault(x => x.Id == id);
+            db.SystemDatas.Remove(a);
+            db.SaveChanges();
+        }
+     
     }
 }

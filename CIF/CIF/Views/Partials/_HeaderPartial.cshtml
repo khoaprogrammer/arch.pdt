@@ -13,16 +13,16 @@
                             <a class="nav-link" href="@Url.Action("Index", "Home")"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Max", "Home")"><i class="fa fa-book" aria-hidden="true"></i> 3DMax</a>
+                            <a class="nav-link" href="@Url.Action("Max3D", "Home")"><i class="fa fa-book" aria-hidden="true"></i> 3DMax</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Sketchup", "Home")"><i class="fa fa-book" aria-hidden="true"></i> Sketchup</a>
+                            <a class="nav-link" href="@Url.Action("SketChup", "Home")"><i class="fa fa-book" aria-hidden="true"></i> Sketchup</a>
                         </li>
+                        @*<li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Books", "Home")"><i class="fa fa-film" aria-hidden="true"></i> Ebook</a>
+                        </li>*@
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Ebook", "Home")"><i class="fa fa-film" aria-hidden="true"></i> Ebook</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Shop", "Home")"><i class="fas fa-shopping-basket"></i> Store</a>
+                            <a class="nav-link" href="@Url.Action("Books", "Home")"><i class="fas fa-shopping-basket"></i>Store</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("Index", "Blog")"><i class="fas fa-rss"></i> Blog</a>
@@ -56,6 +56,7 @@
                 </div>
             </nav>
         </div>
+     
         <div class="col-md-3">
             @if (ViewBag.HideMiniLogin == null)
             {
@@ -98,5 +99,5 @@
         }
     </div>
 </nav>*@
-
+  
 <hr />
