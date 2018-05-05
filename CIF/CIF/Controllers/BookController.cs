@@ -31,6 +31,8 @@ namespace CIF.Controllers
                 var firstContent = book.Contents.OrderBy(x => x.Order).First();
                 ViewBag.FirstContent = firstContent.Code;
             }
+            if(TempData["NoMoney"] !=null)
+                ViewBag.NoMoney = true;
             ViewBag.Title = book.Name + " - " + "Coding is Fun";
             /* STATS */
             var stats = DBHelper.GetStats();
@@ -120,6 +122,43 @@ namespace CIF.Controllers
             int location = int.Parse(locationCode.Split('|')[1]);
             DBHelper.AddPendingTranslate(userId, translateContent, bookId, code, location);
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+        [Authorize]
+        public ActionResult BuyBook(int id)
+        {
+            BuyBook data = new BuyBook {
+                login = false,
+                Money = false,
+                succes = false
+            };
+            UserView user = new UserView();
+            BookViewModel book = new BookViewModel();             
+            data.login = true;
+            user = UIHelper.GetUser(User.Identity.GetUserId());
+            book = UIHelper.Get1Book(id);
+            double moneyUser = user.CIF;
+            double price = book.Price;
+            if (moneyUser < price)
+            {
+                data.Money = true;
+                return Json(new {OK = false, Message = "Tài khoản không đủ xin vui lòng nạp thêm" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                 data.succes = true;
+                 moneyUser -= price;
+                 DBHelper.UpdateMoneyUser(moneyUser, User.Identity.GetUserId());
+                 BookOrderView a = new BookOrderView {
+                    BookId = id,
+                    ApplicationUserId = User.Identity.GetUserId(),
+                    BuyDate = DateTime.Now
+                 };
+                 DBHelper.AddBookOrder(a);
+            }
+                              
+            return Json(new { OK=true, Message="Mua thành công" }, JsonRequestBehavior.AllowGet);
+            //return 
+           
         }
     }
 }

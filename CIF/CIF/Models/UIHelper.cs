@@ -132,6 +132,22 @@ namespace CIF.Models
             return ModelConverter.TopicToView(top);
         }
 
+        internal static ApplicationUser GetBook(string v)
+        {
+            throw new NotImplementedException();
+        }
+        public static BookViewModel Get1Book(int id) {
+
+            Book a = DBHelper.GetBook(id, null);
+            return ModelConverter.BookToView(a);
+
+        }
+
+        internal static UserView Get1Book(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         public static int GetTodayViewCount()
         {
             return DBHelper.GetTodayViewCount();
@@ -287,6 +303,11 @@ namespace CIF.Models
                 // query = query.Where(x => x.Name.ToUpper().Contains(search.ToUpper()));
             }
             return new Tuple<List<ArchModelView>, int>(list.OrderByDescending(x => x.AddDate).Skip((page - 1) * 20).Take(20).ToList(), list.Count);
+        }
+        public static List<BookOrderView> GetBookOrderIdUser(string user) {
+            List<BookOrder> book = DBHelper.GetBookOrderIdUser(user);
+            return book.Select(x => ModelConverter.BookOrderToView(x)).ToList();
+
         }
     }
 }

@@ -17,9 +17,14 @@ namespace CIF.Controllers
         [ShowStats]
         public ActionResult Detail()
         {
+            //UserView user = UIHelper.GetUser(User.Identity.GetUserId());
+            //return View(user);
             UserView user = UIHelper.GetUser(User.Identity.GetUserId());
-            return View(user);
+            ViewBag.User = user;
+            List<BookOrderView> bookOrder = UIHelper.GetBookOrderIdUser(User.Identity.GetUserId());
+            return View(bookOrder);
         }
+        
 
         [HttpPost]
         [Authorize]
@@ -97,6 +102,11 @@ namespace CIF.Controllers
         {
             double remain = DBHelper.AdsFreeMonitor(User.Identity.GetUserId());
             return Json(remain, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AllBookOrder()
+        {
+            List<BookOrderView> bookOrder = UIHelper.GetBookOrderIdUser(User.Identity.GetUserId());
+            return View(bookOrder);
         }
     }
 }

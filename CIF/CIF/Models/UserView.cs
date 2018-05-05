@@ -25,6 +25,7 @@ namespace CIF.Models
         public double CIF { get; set; }
         public bool IsAdsFree { get; set; }
         public double TimeStorage { get; set; }
+        public List<BookOrder> BookOrders { get; set; }
         public double PL
         {
             get

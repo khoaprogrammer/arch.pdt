@@ -45,6 +45,7 @@ namespace CIF.DB
         public DbSet<Document> Documents { get; set; }
 
         public DbSet<ArchModel> ArchModels { get; set; }
+        public DbSet<BookOrder> BookOrders { get; set; }
 
        
     }

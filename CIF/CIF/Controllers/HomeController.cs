@@ -48,7 +48,7 @@ namespace CIF.Controllers
 
         [UserToViewBag]
         [ShowStats]
-        public ActionResult Books(int[] topicIds, int authorId = -1, int publisherId = -1, int page = 1, string search = "*")
+        public ActionResult Books(int[] topicIds = null, int authorId = -1, int publisherId = -1, int page = 1, string search = "*")
         {
             var books = UIHelper.GetAllBooksView(topicIds, authorId, publisherId, page, search);
             ViewBag.Search = search;
@@ -130,7 +130,29 @@ namespace CIF.Controllers
             ViewBag.TotalCount = list.Item2;
             return View(list.Item1);
         }
-      
+
+       
+     /*   public ActionResult Admin()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            db.Roles.Add(new IdentityRole
+            {
+                Id = "ADMIN",
+                Name = "ADMIN"
+            });
+            db.SaveChanges();
+            ApplicationUserManager manager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+            ApplicationUser user = new ApplicationUser
+            {
+                Email = "arch.support@phongdaotao.com",
+                UserName = "arch.support@phongdaotao.com",
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+            manager.Create(user, "Abc123546789*");
+            manager.AddToRole(user.Id, "ADMIN");
+            db.SaveChanges();
+            return Content("OK");
+        }*/
 
     }
 }

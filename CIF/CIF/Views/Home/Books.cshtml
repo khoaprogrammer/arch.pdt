@@ -87,15 +87,13 @@
                 <article class="list--item">
                     <a href="@Url.Action("Index", "Book", new { Id = book.Id })">
                         <figure>
-                            <center><img src="@Url.Content(Path.Combine(CIF.Models.Globals.BookCoverPath, book.Id + ".png"))" alt="" height="250"></center>
+                            <center><img src="@Url.Content(Path.Combine(CIF.Models.Globals.BookCoverPath, book.Id + ".png"))" alt="" height="250" width="200"></center>
                             <header>
                                 <h2>@book.Name</h2>
                             </header>
+                           
                             <figcaption>
-                                @book.Publisher.Name
-                            </figcaption>
-                            <figcaption>
-                                0 VND
+                                @book.Price <text> VND</text>
                             </figcaption>
                         </figure>
                     </a>

@@ -12,5 +12,5 @@ namespace CIF.DB
         public string Name { get; set; }
         public string Introduction { get; set; }
         public virtual ICollection<Book> Books { get; set; }
-    }
+    }   
 }

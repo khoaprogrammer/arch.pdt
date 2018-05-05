@@ -15,6 +15,23 @@
 
 <div class="row">
     <div class="col-md-3">
+        <div class="col-md-12">          
+                <div class="alert alert-warning">
+                    ví dụ thôi nha
+                </div>
+            
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" >               
+                @if (ViewBag.NoMoney != null)
+                {
+                    <div class="alert alert-warning">
+                        <p>Tài khoản không đủ tiền, Vui lòng nạp thêm</p>
+                    </div> 
+                }
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <center>
@@ -24,8 +41,9 @@
         </div>
         <div class="row">
             <div class="col-md-12 btn-wrapper">
-                <button class="btn btn-success" id="btn-read"><i class="fa fa-book" aria-hidden="true"></i> Read this book</button>
+                <button class="btn btn-success" id="btn-buy"><i class="fa fa-book" aria-hidden="true"></i> Mua (@Model.Price <text> VND)</text></button>
             </div>
+            
         </div>
         @*<div class="row">
             <div class="col-md-12 btn-wrapper">
@@ -48,19 +66,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 book-authors">
-                <b>Authors: </b>
-                @foreach (var author in Model.Authors)
-                {
-                    @author.Name<span>, </span>
-                }
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <b>Publisher: </b>
-                @Model.Publisher.Name
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <b>Published: </b>
-                @Model.PublishDate.ToString("MMMM yyyy")
-            </div>
+            
             <div class="col-md-12 book-breadcrum">
                 @if (Model.BreadCrums != null)
                 {
@@ -134,6 +140,31 @@
                 }
             })
         });
+        $(document).on('click', "#btn-buy", function () {
+            var conf = confirm("Xác nhận mua?");
+            if (conf) {
+                $.ajax("@Url.Action("BuyBook", "Book")", {
+                    type: "GET",
+                    data: {
+                        id: "@Model.Id"
+                    },
+                    success: function (data) {
+                        if(!data.OK)
+                        {
+                            window.alert(data.Message);
+                        }
+                        else{
+                            window.alert(data.Message);
+                            //location.href = "@Url.Action("Index", "Home", this.Request.Url.Scheme)";
+                        }
+
+                    }
+                })
+            }
+        })
+
+
+
     </script>
 }
 

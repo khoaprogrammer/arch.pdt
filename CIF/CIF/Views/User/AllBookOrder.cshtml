@@ -1,7 +1,7 @@
 ﻿@model List<CIF.Models.BookOrderView>
 
 @{
-    ViewBag.Title = "Detail";
+    ViewBag.Title = "AllBookOrder";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -28,59 +28,31 @@
                     <a href="#account-info" class="nav-link active" data-toggle="tab" role="tab" aria-controls="account-info">Thông tin tài khoản</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#my-book" class="nav-link" data-toggle="tab" role="tab" aria-controls="my-book">Sách đã mua</a>
+                    <a href="#my-book" class="nav-link" data-toggle="tab" role="tab" aria-controls="my-courses">Sách đã mua</a>
                 </li>
 
             </ul>
-            <div class="tab-content" style="width: 100%">
+            <div class="tab-content">
                 <div class="tab-pane fade show active" id="account-info" role="tabpanel">
-                     
-                       @{CIF.Models.UserView user = (CIF.Models.UserView)ViewBag.User;
-                               <text>Tài khoản: @user.CIF VND</text>
-                               
-                               }
-                    
                 </div>
-                <div class="tab-pane" id="my-book" role="tabpanel">
-
-                    <table class="table" style="width: 100%">
-                        <tr>
-                            <th>
-                                Hình
-                            </th>
-                            <th>
-                               Tên
-                            </th>
-                            <th>
-                               Ngày mua
-                            </th>                     
-                            <th></th>
-                        </tr>
-
-                        @foreach (var item in Model)
+                @*<div class="tab-pane fade" id="my-courses" role="tabpanel">
+                        @foreach (var course in Model.CourseSessions)
                         {
-                            <tr>
-                                <td>
-                                    <img src="@Url.Content("~/Content/bookcovers/" + item.BookId + ".png")" width="70" height="70" />
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Book.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.BuyDate)
-                                </td>
-                                <td>
-                                    <a href="@item.Book.DriveCode">Tải về</a>
-                                    
-                                </td>
-                            </tr>
+                            @Html.Partial("~/Views/Partials/_CourseCardPartial.cshtml", CIF.Models.ModelConverter.CourseSessionToView(course))
                         }
-
-                    </table>
-                </div>
+                    </div>*@
             </div>
 
-            
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="my-book" role="tabpanel">
+                    </div>
+                    <div class="tab-pane fade" id="my-courses" role="tabpanel">
+                        @foreach (var book in Model)
+                        {
+                            <text> <p> @book.Book.Name</p> <br/></text>
+                        }
+                </div>
+            </div>
 
         </div>
     </div>

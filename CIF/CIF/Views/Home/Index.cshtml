@@ -64,6 +64,7 @@
     <meta property="og:image" content="@(Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/Content/Imgs/logo.png"))" />
 }
 
+
 <div class="row">
     <div class="col-md-12">
         <div class="row">
@@ -263,6 +264,21 @@
   $('.card__subtitle').each(function () {
       $(this).text($(this).text().trunc(100, true));
   });
+
+  $(document).on('click', "#btn-test", function () {
+      var conf = confirm("Xác nhận gửi?");
+      if (conf) {
+          $.ajax("@Url.Action("Test", "Home")", {
+              type: "GET",
+              data: {
+                  id: 2
+              },
+              success: function (data) {
+                  alert(data);
+              }
+          })
+      }
+  })
 </script>
 @*<script type="text/javascript">
   (sc_adv_out = window.sc_adv_out || []).push({

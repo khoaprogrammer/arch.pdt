@@ -275,14 +275,7 @@ namespace CIF.Models
             {
                 query = query.Where(x => x.Topics.Any(y => topicIds.Contains(y.Id)));
             }
-            if (authorId != -1)
-            {
-                query = query.Where(x => x.Authors.Any(y => y.Id == authorId));
-            }
-            if (publisherId != -1)
-            {
-                query = query.Where(x => x.PublisherId == publisherId);
-            }
+           
 
             if (search != "*")
             {
@@ -316,6 +309,11 @@ namespace CIF.Models
         {
             var ContextInstance = context != null ? context : ApplicationDbContext.Create();
             return ContextInstance.Publishers.First(x => x.Id == id);
+        }
+
+        internal static List<BookOrder> GetBookOrderIdUser()
+        {
+            throw new NotImplementedException();
         }
 
         public static List<AccessToken> GetAllAccessTokens()
@@ -352,15 +350,16 @@ namespace CIF.Models
                 ISBN = model.ISBN,
                 Description = model.Description,
                 PublishDate = model.PublishDate,
-                PublisherId = model.PublisherId,
+              //  PublisherId = model.PublisherId,
                 Contents = model.Contents,
                 AddDate = DateTime.Now,
-                Authors = model.AuthorIds.Select(x => ContextInstance.Authors.First(y => y.Id == x)).ToList(),
+               // Authors = model.AuthorIds.Select(x => ContextInstance.Authors.First(y => y.Id == x)).ToList(),
                 Topics = model.TopicIds.Select(x => ContextInstance.Topics.First(y => y.Id == x)).ToList(),
                 CSSURL = css,
                 ShortCode = shortCode,
                 CustomCSS = customCss,
-                DriveCode = model.DriveCode
+                DriveCode = model.DriveCode,
+                Price = model.Price
             };
             ContextInstance.Books.Add(add);
             ContextInstance.SaveChanges();
@@ -419,14 +418,15 @@ namespace CIF.Models
         {
             var ContextInstance = context != null ? context : ApplicationDbContext.Create();
             Book update = GetBook(model.Id, ContextInstance);
-            update.Authors.Clear();
+          //  update.Authors.Clear();
             update.Topics.Clear();
             update.ISBN = model.ISBN;
-            update.Authors = ContextInstance.Authors.Where(x => model.AuthorIds.ToList().Contains(x.Id)).ToList();
-            update.PublisherId = model.PublisherId;
+           // update.Authors = ContextInstance.Authors.Where(x => model.AuthorIds.ToList().Contains(x.Id)).ToList();
+           // update.PublisherId = model.PublisherId;
             update.Name = model.Name;
             update.PublishDate = model.PublishDate;
             update.CustomCSS = model.CSS;
+            update.Price = model.Price;
             update.Topics = ContextInstance.Topics.Where(x => model.TopicIds.ToList().Contains(x.Id)).ToList();
 
             return ContextInstance.SaveChanges();
@@ -871,6 +871,24 @@ namespace CIF.Models
             db.SystemDatas.Remove(a);
             db.SaveChanges();
         }
-     
+        public static void AddBookOrder(BookOrderView a) {
+            ApplicationDbContext db = new ApplicationDbContext();
+            db.BookOrders.Add(ModelConverter.ViewToBookOrder(a));
+            db.SaveChanges();
+        }
+
+        public static void UpdateMoneyUser(double money, string id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ApplicationUser user = db.Users.FirstOrDefault(x => x.Id == id);
+            user.CIF = money;
+            db.SaveChanges();
+        }
+        public static List<BookOrder> GetBookOrderIdUser(string user)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            List<BookOrder> book = db.BookOrders.Where(x => x.ApplicationUserId == user).ToList();
+            return book;
+        }
     }
 }

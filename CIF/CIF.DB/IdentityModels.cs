@@ -27,6 +27,7 @@ namespace CIF.DB
         public virtual List<TranslatedContent> TranslatedContents { get; set; }
         public double TimeStorage { get; set; }
         public bool IsAdsFree { get; set; }
-        
+        public virtual List<BookOrder> BookOrders { get; set; }
+    
     }
 }

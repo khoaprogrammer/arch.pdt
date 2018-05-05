@@ -226,12 +226,9 @@ namespace CIF.Controllers
                 {
                     Name = publisher
                 };
-                b.PublisherId = DBHelper.AddPublisher(pub);
+               // b.PublisherId = DBHelper.AddPublisher(pub);
             }
-            else
-            {
-                b.PublisherId = pub.Id;
-            }
+          
             var authors = author.Split(',');
             List<int> autIds = new List<int>();
             foreach (string au in authors)
@@ -249,7 +246,7 @@ namespace CIF.Controllers
                     autIds.Add(aut.Id);
                 }
             }
-            b.Authors = autIds.Select(x => new Author { Id = x }).ToList();
+           // b.Authors = autIds.Select(x => new Author { Id = x }).ToList();
             TempData["addingBook"] = b;
             return RedirectToAction("AddBookDetail");
         }
@@ -258,11 +255,9 @@ namespace CIF.Controllers
         public ActionResult AddPDFBook()
         {
             List<TopicViewModel> topics = UIHelper.GetTopicTree();
-            List<PublisherViewModel> publishers = UIHelper.GetAllPublishersView();
-            List<AuthorViewModel> authors = UIHelper.GetAllAuthorsView();
+          
             ViewBag.TopicList = topics;
-            ViewBag.AuthorList = authors;
-            ViewBag.PublisherList = publishers;
+            
             return View("~/Views/Admin/AddBookDetail.cshtml", new BookViewModel());
         }
 
@@ -270,12 +265,10 @@ namespace CIF.Controllers
         public ActionResult AddBookDetail()
         {
             Book addingBook = (Book)TempData["addingBook"];
-            List<TopicViewModel> topics = UIHelper.GetTopicTree();
-            List<PublisherViewModel> publishers = UIHelper.GetAllPublishersView();
-            List<AuthorViewModel> authors = UIHelper.GetAllAuthorsView();
+            List<TopicViewModel> topics = UIHelper.GetTopicTree(); ;// = UIHelper.GetTopicTree();
             ViewBag.TopicList = topics;
-            ViewBag.AuthorList = authors;
-            ViewBag.PublisherList = publishers;
+
+
             ViewBag.FileName = addingBook.Name;
             TempData["AddingBook"] = addingBook;
             return View(ModelConverter.BookToView(addingBook));
@@ -285,6 +278,7 @@ namespace CIF.Controllers
         [HttpPost]
         public ActionResult AddBookDetail(BookViewModel model, HttpPostedFileBase coverFile)
         {
+   
             if (model.DriveCode != null)
             {
                 model.Contents = new List<DB.Content>();
@@ -292,6 +286,7 @@ namespace CIF.Controllers
                 DBHelper.AddBook(model, coverFile, null, null, null, null);
             } else
             {
+               // model.Publisher = new BookViewModel();
                 Book b = (Book)TempData["AddingBook"];
                 model.Contents = b.Contents.ToList();
                 var toc = b.TOCLines.ToList();

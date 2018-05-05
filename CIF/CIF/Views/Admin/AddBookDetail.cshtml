@@ -48,14 +48,14 @@
                         @Html.ValidationMessageFor(model => model.ISBN, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
                 <div class="form-group">
-                    @Html.LabelFor(model => model.PublisherId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.DropDownListFor(x => x.PublisherId, new SelectList(ViewBag.PublisherList, "Id", "Name"), new { @class="selectpicker", data_live_search=true })
-                        @Html.ValidationMessageFor(model => model.PublisherId, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
             </div>
             <div class="col-md-6">
                 @*<div class="form-group">
@@ -83,7 +83,7 @@
                     @Html.LabelFor(model => model.Topics, new { @class="col-md-2 control-label" })
                     <div class="col-md-10">
                         <select class="selectpicker" id="TopicIds" name="TopicIds" multiple>
-                            @foreach (CIF.Models.TopicViewModel topic in ViewBag.TopicList)
+                            @foreach ( var topic in (List<CIF.Models.TopicViewModel>)ViewBag.TopicList)
                             {
                                 if (topic.Childs.Count != 0)
                                 {
@@ -98,13 +98,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.AuthorIds, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.ListBoxFor(x => x.AuthorIds, new SelectList(ViewBag.AuthorList, "Id", "Name"), new { @class = "selectpicker", data_live_search = true, multiple=true })
-                        @Html.ValidationMessageFor(model => model.AuthorIds, "", new { @class = "text-danger" })
-                    </div>
-                </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.DriveCode, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">

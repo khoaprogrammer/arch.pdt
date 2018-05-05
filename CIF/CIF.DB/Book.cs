@@ -15,13 +15,13 @@ namespace CIF.DB
             this.Contents = new List<Content>();
             this.TOCLines = new List<TOCLine>();
             this.Topics = new List<Topic>();
-            this.Authors = new List<Author>();
+           // this.Authors = new List<Author>();
         }
         public int Id { get; set; }
         public string Name { get; set; }
-        public int PublisherId { get; set; }
-        public virtual Publisher Publisher { get; set; }
-        public virtual ICollection<Author> Authors { get; set; }
+      //  public int PublisherId { get; set; }
+     //   public virtual Publisher Publisher { get; set; }
+     //   public virtual ICollection<Author> Authors { get; set; }
         public DateTime PublishDate { get; set; }
         public string ISBN { get; set; }
         public virtual ICollection<Topic> Topics { get; set; }
@@ -37,5 +37,7 @@ namespace CIF.DB
         public int VisitCount { get; set; }
         public int ReadCount { get; set; }
         public string DriveCode { get; set; }
+        public double Price { get; set; }
+        public virtual List<BookOrder> BookOrders { get; set; }
     }
 }

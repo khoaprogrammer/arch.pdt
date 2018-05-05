@@ -100,28 +100,40 @@ namespace CIF.Models
         {
             return new BookViewModel
             {
-                Authors = b.Authors.ToList(),
+            //    Authors = b.Authors.ToList(),
                 Contents = b.Contents.ToList(),
                 Description = b.Description,
                 Id = b.Id,
                 ISBN = b.ISBN,
                 Name = b.Name,
                 PublishDate = b.PublishDate,
-                Publisher = b.Publisher,
-                PublisherId = b.PublisherId,
+              //  Publisher = b.Publisher,
+              //  PublisherId = b.PublisherId,
                 Topics = b.Topics.ToList(),
                 AddDate = b.AddDate,
                 TOCLines = b.TOCLines.ToList(),
                 ShortCode = b.ShortCode,
                 TopicIds = b.Topics.Select(x => x.Id).ToArray(),
-                AuthorIds = b.Authors.Select(x => x.Id).ToArray(),
+               // AuthorIds = b.Authors.Select(x => x.Id).ToArray(),
                 ReadCount = b.ReadCount,
                 VisitCount = b.VisitCount,
                 DriveCode = b.DriveCode,
-                CSS = b.CustomCSS
+                Price = b.Price,
+                CSS = b.CustomCSS,
+                BookOrders = b.BookOrders
             };
         }
+        public static BookOrderView BookOrderToView(BookOrder a) {
+            return new BookOrderView
+            {
+                ApplicationUser = a.ApplicationUser,
+                BookId = a.BookId,
+                ApplicationUserId = a.ApplicationUserId,
+                Book = a.Book,
+                BuyDate = a.BuyDate
 
+            };
+        } 
         public static SupportTicketView SupportTicketToView(SupportTicket x)
         {
             return new SupportTicketView
@@ -186,7 +198,10 @@ namespace CIF.Models
                 EXP = user.EXP,
                 Level = user.Level,
                 IsAdsFree = user.IsAdsFree,
-                TimeStorage = user.TimeStorage
+                TimeStorage = user.TimeStorage,
+                BookOrders = user.BookOrders,
+
+
             };
             foreach (var role in user.Roles)
             {
@@ -280,8 +295,26 @@ namespace CIF.Models
             };
 
         }
+        public static BookOrder ViewToBookOrder(BookOrderView a) {
+            return new BookOrder
+            {
+
+                ApplicationUser = a.ApplicationUser,
+                BookId = a.BookId,
+                ApplicationUserId = a.ApplicationUserId,
+                Book = a.Book,
+                BuyDate = a.BuyDate
+
+            };
+
+        }
 
         internal static List<ArchModelView> ArchModelToView(Func<List<ArchModel>> getAllArchModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static TopicViewModel TopicToView(List<Topic> topics)
         {
             throw new NotImplementedException();
         }
